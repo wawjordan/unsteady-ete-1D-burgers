@@ -86,7 +86,7 @@ for i = 1:M % space loop
         int = OUT.method(soln);
         ETE_int = OUT.ETE_method(err_soln);
         [soln,err_soln,int,ETE_int,Primal,Error] = ...
-            ETEsolver(soln,err_soln,int,ETE_int,BC,OUT.maxiter,intervals(j));
+            ETEsolver2(soln,err_soln,int,ETE_int,BC,OUT.maxiter,intervals(j));
         OUT.Local_Error_P(i,j).E = Primal.out.error;
         OUT.Local_Error_P(i,j).u = Primal.out.u;
         OUT.Local_Error_P(i,j).x = soln.grid.x(soln.i);
@@ -108,4 +108,4 @@ for i = 1:M % space loop
     OUT.dx(i,1) = max(soln.grid.dx);
 end
 
-save('Figures\combinedETE_BDF2_shock','OUT');
+save('C:\Users\Will Jordan\Documents\MATLAB\Grad_School\VT_Research\Unsteady_ETE_1D_Burgers_Eqn\post_processing\combinedETE_BDF2_shock_asym','OUT');
