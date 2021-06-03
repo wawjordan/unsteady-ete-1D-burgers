@@ -17,7 +17,10 @@ classdef back_diff_2_ETE < time_integrator_type
         end
         function [e_new,R,this] = step(this,soln,soln_error,~)
             e_new = soln_error.error;
-            ind = soln_error.ptr(soln_error.M/2+1);
+%============ use this one for asymmetric stencil     ========%
+            ind = soln_error.ptr(soln_error.M+1);
+%============ use this one for symmetric stencil     ========%
+%             ind = soln_error.ptr(soln_error.M/2+1);
             
             dt = soln.dt;
             t = soln_error.t(ind);
