@@ -1,12 +1,16 @@
 %% Separate Order analysis
 clc; clear; close all;
-load('combinedETE_trap_shock.mat');
+load('combinedETE_BDF2_shock_asym.mat');
 % E = OUT.Final_Enorm_E;
 
 % L-norm (3=infinity)
 norm = 1;
-dirname = 'G:\My Drive\MATLAB\VT_Research\2021\SciTech2022\Preliminary_Results\Figures_and_Data\';
-filename1 = 'unsteady_OOA_trap_L1.dat';
+% dirname = 'G:\My Drive\MATLAB\VT_Research\2021\SciTech2022\Preliminary_Results\Figures_and_Data\';
+% filename1 = 'unsteady_OOA_trap_L1.dat';
+
+dirname = 'C:\Users\Will Jordan\Desktop\';
+filename1 = 'BDF2_OOA_asym.dat';
+
 
 E_error = OUT.Error_Norms_E;
 E_primal = OUT.Error_Norms_P;
