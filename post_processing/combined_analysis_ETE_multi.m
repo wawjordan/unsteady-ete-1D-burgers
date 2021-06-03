@@ -1,6 +1,6 @@
 %% Plotting for Combined Order Analysis (ETE)
 clc; clear; close all;
-load('combinedETE_trap_shock.mat');
+load('combinedETE_trap_shock_asym.mat');
 % E = OUT.Final_Enorm_E;
 
 % L-norm (3=infinity)
@@ -108,16 +108,16 @@ for k = 1:L
     subplot(1,2,1)
     hold on;
 %     plot(dx(3:end),Exp(:,k),'r')
-    plot(dx,P(:,A,k),'r.-')
+    plot(dx,E(:,A,k),'r.-')
 %     plot(dt(3:end),Etp(:,k),'k')
-    plot(dt,P(B,:,k),'k.-')
+    plot(dt,E(B,:,k),'k.-')
 %     hold off;
     set(gca,'xscale','log')
     set(gca,'yscale','log')
     subplot(1,2,2)
     hold on;
-    plot(dx(3:end),pxp(:,k),'r.-')
-    plot(dt(3:end),ptp(:,k),'k.-')
+    plot(dx(3:end),px(:,k),'r.-')
+    plot(dt(3:end),pt(:,k),'k.-')
 %     hold off;
     set(gca,'xscale','log')
     ylim([0,6])
@@ -125,7 +125,7 @@ end
 
 
 dirname = 'C:\Users\Will Jordan\Desktop\';
-filename1 = 'trap_OOA';
+filename1 = 'trap_OOA_asym';
 
 t = E_error(1,1).t(:);
 t(abs(t)<1e-6)=0;
