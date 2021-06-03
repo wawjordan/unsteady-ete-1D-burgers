@@ -12,8 +12,13 @@ classdef trapezoid_method_ETE < time_integrator_type
             this.i = soln_error.i;
         end  
         function [e_new,R,this] = step(this,soln,soln_error,~)
-            ind1 = soln_error.ptr(soln_error.M/2);
-            ind2 = soln_error.ptr(soln_error.M/2+1);
+%============ use this one for asymmetric stencil     ========%
+            ind1 = soln_error.ptr(soln_error.M);
+            ind2 = soln_error.ptr(soln_error.M+1);
+%============ use this one for symmetric time stencil ========%
+%             ind1 = soln_error.ptr(soln_error.M/2);
+%             ind2 = soln_error.ptr(soln_error.M/2+1);
+%=============================================================%
 %             ind1 = soln_error.ptr(soln_error.M/2+1);
 %             ind2 = soln_error.ptr(soln_error.M/2+2);
             t1 = soln_error.t(ind1);
