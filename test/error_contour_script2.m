@@ -83,7 +83,7 @@ for i = 1:M % space loop
         int = OUT.method(soln);
         ETE_int = OUT.ETE_method(err_soln);
         [soln,err_soln,int,ETE_int,Primal,Error] = ...
-            ETEsolver(soln,err_soln,int,ETE_int,BC,OUT.maxiter,1);
+            ETEsolver2(soln,err_soln,int,ETE_int,BC,OUT.maxiter,1);
         OUT.Local_Error_P(i,j).E = Primal.out.error;
         OUT.Local_Error_P(i,j).u = Primal.out.u;
         OUT.Local_Error_P(i,j).x = soln.grid.x(soln.i);
@@ -116,17 +116,16 @@ es_out = [OUT.Local_Error_E.e{:}];
 ec_out = [OUT.Local_Error_E.Ee{:}];
 field_out = [T(:), X(:), u_out(:), eb_out(:), es_out(:), ec_out(:)];
 
-dirname = 'C:\Users\Will Jordan\Desktop\';
-filename = sprintf('%s_N%0.4d_P%0.1d_',func2str(OUT.method),OUT.Nd,OUT.order);
-filename1 = [filename,'field'];
-filename2 = [filename,'time'];
-% filename = sprintf('%s_%s_N=%d_dt=%0.5f',func2str(OUT.method),OUT.solution_type,OUT.Nd,dt0);
+dirname = 'C:\Users\Will Jordan\Desktop\CCAS_Presentations\June\Figures\';
+filename0 = sprintf('asym_%s_N%0.4d_P%0.1d_',func2str(OUT.method),OUT.Nd,OUT.order);
+filename1 = [filename0,'field'];
+filename = sprintf('%s_%s_N=%d_dt=%0.5f',func2str(OUT.method),OUT.solution_type,OUT.Nd,dt0);
 
 name=[dirname,filename1,'.dat'];
 fid=fopen(name,'wt');
 fprintf(fid,'TITLE = viscous_shock\n');
 fprintf(fid,'variables="t","x","u","Base DE","Estimated DE","Corrected DE"\n');
-fprintf(fid,'Zone T = "viscous_shock"\n');
+fprintf(fid,sprintf('Zone T = "N%0.4d"\n',OUT.Nd));
 fprintf(fid,'I=%d  J=%d\n',Nx,Nt);
 fprintf(fid,'ZONETYPE = Ordered\n');
 fprintf(fid,'DATAPACKING=BLOCK\n');
@@ -139,8 +138,10 @@ for j = 1:nn
 end
 fclose(fid);
 
-norm = 1;
+
 %%
+for norm = 1:3
+filename2 = [filename0,sprintf('time_L%d',norm)];
 t = OUT.Error_Norms_P.t(:);
 Nt = length(t);
 eb_n = OUT.Error_Norms_P.E(:,1,norm);
@@ -150,7 +151,8 @@ name=[dirname,filename2,'.dat'];
 fid=fopen(name,'wt');
 fprintf(fid,'TITLE = e_norm\n');
 fprintf(fid,'variables="t","Base Error","Corrected Error"\n');
-fprintf(fid,'Zone T = "viscous_shock"\n');
+% fprintf(fid,'Zone T = "viscous_shock"\n');
+fprintf(fid,sprintf('Zone T = "N%0.4dL%0.1d"\n',OUT.Nd,norm));
 fprintf(fid,'I=%d\n',Nt);
 fprintf(fid,'ZONETYPE = Ordered\n');
 fprintf(fid,'DATAPACKING=BLOCK\n');
@@ -162,7 +164,7 @@ for j = 1:nn
     end
 end
 fclose(fid);
-
+end
 
 % contourf(OUT.Local_Error_P.t,OUT.Local_Error_P.x,[OUT.Local_Error_P.E{:}],'linecolor','none');
 % contourf(OUT.Local_Error_E.t,OUT.Local_Error_E.x,[OUT.Local_Error_E.Ee{:}],'linecolor','none');
