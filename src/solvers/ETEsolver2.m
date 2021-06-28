@@ -76,21 +76,21 @@ function [soln,err,integrator,ETE_integrator,Primal,Error] = ETEsolver2(soln,err
         fprintf('Iter - %0.4d\n',err.count);
         Error.t(err.count) = err.t(err.ptr(M+1));
         
-        Ncorr = 1;
+        Ncorr = 10;
         for nc = 1:Ncorr
             [err.error,resnorm,ETE_integrator] = ETE_integrator.step(soln,err,bndry_cond);
-            err.stencil(soln.i,err.ptr(M+1)) = err.stencil(soln.i,err.ptr(M+1)) - err.error;
-%             soln.U(soln.i) = soln.U(soln.i) - err.error;
+%             err.stencil(soln.i,err.ptr(M+1)) = err.stencil(soln.i,err.ptr(M+1)) - err.error;
+            soln.U(soln.i) = soln.U(soln.i) - err.error;
         end
-%         err.error = Uh0(soln.i) - soln.U(soln.i);
+        err.error = Uh0(soln.i) - soln.U(soln.i);
 
-        err.error = Uh0(soln.i) - err.stencil(soln.i,err.ptr(M+1));
-        err.stencil(:,err.ptr(M+1)) = Uh0;
-
-
+%         err.error = Uh0(soln.i) - err.stencil(soln.i,err.ptr(M+1));
+%         err.stencil(:,err.ptr(M+1)) = Uh0;
 
 
-%         soln.U = Uh0;
+
+
+        soln.U = Uh0;
 %         for nc = 1:Ncorr
 %             [err.error,resnorm,ETE_integrator] = ETE_integrator.step(soln,err,bndry_cond);
 %             err.stencil(soln.i,err.ptr(M+1)) = err.stencil(soln.i,err.ptr(M+1)) - err.error;
