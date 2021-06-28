@@ -41,6 +41,7 @@ function [soln,err,integrator,ETE_integrator,Primal,Error] = ETEsolver2(soln,err
         Primal.R{i} = 0;
         err = err.update_time_stencil(soln);
     end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     err.count = 0;
     while (err.count < max_steps)&&(err.t(err.ptr(M)) < err.tf)
         i = i+1;
@@ -64,13 +65,38 @@ function [soln,err,integrator,ETE_integrator,Primal,Error] = ETEsolver2(soln,err
             Primal.out.error{i} = soln.U(soln.i)-soln.ExactSolution(soln.i);
             Primal.out.u{i} = soln.U(soln.i);
         end
+        % Here we have a saved copy of the uh0 solution
+        % now we can operate on the soln.U array and recover the original
+        % primal solution later
+        Uh0 = soln.U;
+        
+%=========================================================================%
         err = err.update_time_stencil(soln);
         err.count = err.count+1;
         fprintf('Iter - %0.4d\n',err.count);
-%         disp(err.t(err.ptr));
         Error.t(err.count) = err.t(err.ptr(M+1));
         
-        [err.error,resnorm,ETE_integrator] = ETE_integrator.step(soln,err,bndry_cond);
+        Ncorr = 1;
+        for nc = 1:Ncorr
+            [err.error,resnorm,ETE_integrator] = ETE_integrator.step(soln,err,bndry_cond);
+            err.stencil(soln.i,err.ptr(M+1)) = err.stencil(soln.i,err.ptr(M+1)) - err.error;
+%             soln.U(soln.i) = soln.U(soln.i) - err.error;
+        end
+%         err.error = Uh0(soln.i) - soln.U(soln.i);
+
+        err.error = Uh0(soln.i) - err.stencil(soln.i,err.ptr(M+1));
+        err.stencil(:,err.ptr(M+1)) = Uh0;
+
+
+
+
+%         soln.U = Uh0;
+%         for nc = 1:Ncorr
+%             [err.error,resnorm,ETE_integrator] = ETE_integrator.step(soln,err,bndry_cond);
+%             err.stencil(soln.i,err.ptr(M+1)) = err.stencil(soln.i,err.ptr(M+1)) - err.error;
+%         end
+%         err.error = Uh0(soln.i) - err.stencil(soln.i,err.ptr(M+1));
+%=========================================================================%
         current_error = err.stencil(soln.i,err.ptr(M+1)) ...
             - soln.calc_exact(soln.grid.x(soln.i),err.t(err.ptr(M+1)));
         
@@ -89,7 +115,7 @@ function [soln,err,integrator,ETE_integrator,Primal,Error] = ETEsolver2(soln,err
             Error.out.error{err.count} = err.error;
         end
     end
-    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     indP = find(abs(Primal.t-soln.tf)<1e-6,1);
     % Primal.R = Primal.R(~cellfun('isempty',Primal.R));
     Primal.R = Primal.R(M+1:indP);

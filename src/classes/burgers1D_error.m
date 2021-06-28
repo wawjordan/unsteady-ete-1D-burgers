@@ -73,7 +73,7 @@ classdef burgers1D_error
                u1(j1) = polyval(P1,t);
            end
        end
-       function [TE_est,R] = space_TE_est(this,bsoln,u)
+       function [TE_est,R,u0] = space_TE_est(this,bsoln,u)
            u0 = zeros(this.N,1);
            u1 = zeros(this.N,1);
            u2 = zeros(this.N,1);
