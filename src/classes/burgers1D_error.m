@@ -39,7 +39,7 @@ classdef burgers1D_error
            
            this.T = ones(this.M+1,this.order+1);
            this.t = zeros(this.order+1,1);
-           this.stencil = zeros(this.N,this.order+1);           
+           this.stencil = zeros(this.N,this.order+1);
        end
        function [this] = reset(this)
            this.count = 0;
