@@ -76,7 +76,7 @@ function [soln,err,integrator,ETE_integrator,Primal,Error] = ETEsolver2(soln,err
         fprintf('Iter - %0.4d\n',err.count);
         Error.t(err.count) = err.t(err.ptr(M+1));
         
-        Ncorr = 10;
+        Ncorr = 1;
         for nc = 1:Ncorr
             [err.error,resnorm,ETE_integrator] = ETE_integrator.step(soln,err,bndry_cond);
 %             err.stencil(soln.i,err.ptr(M+1)) = err.stencil(soln.i,err.ptr(M+1)) - err.error;
