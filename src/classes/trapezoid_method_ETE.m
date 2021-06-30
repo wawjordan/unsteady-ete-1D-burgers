@@ -64,8 +64,8 @@ classdef trapezoid_method_ETE < time_integrator_type
 %             Rdudt = (u02(this.i)-u01(this.i))/soln.dt;
 %             TE1 = TE1 + Tdudt1;
 %             TE2 = TE2 + Tdudt2;
-%             TE1 = TE1 - (RE1+Rdudt);
-%             TE2 = TE2 - (RE2+Rdudt);
+%             TE1 = TE1 + (RE1+Rdudt);
+%             TE2 = TE2 + (RE2+Rdudt);
 %             F1 = Rue1 - Ru1 + TE1;
 %             F2 = Rue2 - Ru2 + TE2;
             
@@ -91,7 +91,7 @@ classdef trapezoid_method_ETE < time_integrator_type
             for k = 1:soln.neq
                 this.Rinit(1,k) = norm(R_new(:,k));
             end
-            while false %(any(this.Rnorm>this.newton_tol))&&(j<this.newton_max_iter)
+            while (any(this.Rnorm>this.newton_tol))&&(j<this.newton_max_iter)
                 
                 J = soln.jacobian(ue2);
                 J2 = -(1/2)*soln.dt.*J;
