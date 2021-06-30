@@ -15,17 +15,17 @@ BD_ETE = back_diff_2_ETE(err_soln);
 maxiter = 500;
 
 
-% [bsoln,err_soln,TM,TM_ETE,Primal,Error] = ETEsolver2(bsoln,err_soln,TM,TM_ETE,BC,maxiter,1);
+% [bsoln,err_soln,TM,TM_ETE,Primal,Error] = ETEsolver(bsoln,err_soln,TM,TM_ETE,BC,maxiter,1);
 [bsoln,err_soln,TM,TM_ETE,Primal,Error] = unsteady_iterated_ETE_solver(bsoln,err_soln,TM,TM_ETE,BC,maxiter,1);
+% [bsoln,err_soln,BD,BD_ETE,Primal,Error] = unsteady_iterated_ETE_solver2(bsoln,err_soln,BD,BD_ETE,BC,maxiter,1);
 %%
-hold on;
-for i = 1:length(Error.out.t)
-    clf;
-    hold on;
-    plot(bsoln.grid.x(bsoln.i),Primal.out.error{i},'k');
-    plot(bsoln.grid.x(bsoln.i),Error.out.error{i},'r');
-    hold off;
-    xlim([bgrid.xmin,bgrid.xmax])
-    drawnow;
-%     pause(0.5);
-end
+% hold on;
+% for i = 1:length(Error.out.t)
+%     clf;
+%     hold on;
+%     plot(bsoln.grid.x(bsoln.i),Primal.out.error{i},'k');
+%     plot(bsoln.grid.x(bsoln.i),Error.out.error{i},'r');
+%     hold off;
+%     xlim([bgrid.xmin,bgrid.xmax])
+%     drawnow;
+% end
