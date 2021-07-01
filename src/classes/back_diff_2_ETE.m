@@ -39,8 +39,8 @@ classdef back_diff_2_ETE < time_integrator_type
             t = soln_error.t(ind);
             
 %             u = soln.U;
-%             u = soln_error.stencil(:,ind);
-            u = this.u_old(:,ind);
+            u = soln_error.stencil(:,ind);
+%             u = this.u_old(:,ind);
             
             ue = u;
             ue(this.i) = u(this.i)-e_new;
