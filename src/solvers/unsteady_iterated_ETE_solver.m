@@ -135,7 +135,8 @@ for k = 1:num_iter
     % Solve ETE again
     for i = 1:stenLength-1
         ETE_integrator.pos = i;
-        [err.error,resnorm,~] = ETE_integrator.step(soln,err,bndry_cond);
+%         [err.error,resnorm,~] = ETE_integrator.step(soln,err,bndry_cond);
+        [err.error,resnorm,ETE_integrator] = ETE_integrator.step(soln,err,bndry_cond);
         estError(:,i+1) = err.error;
 %=========================================================================%
 % Iterative residuals for iterative corrections
@@ -188,7 +189,8 @@ while (soln.count < max_steps)&&(err.t(err.ptr(M+1)) < err.tf)
     err.error = tempError;
     
     % solve ETE for new time step
-    [err.error,resnorm,~] = ETE_integrator.step(soln,err,bndry_cond);
+%     [err.error,resnorm,~] = ETE_integrator.step(soln,err,bndry_cond);
+    [err.error,resnorm,ETE_integrator] = ETE_integrator.step(soln,err,bndry_cond);
 %     plot(err.error,'r')
     tempError = err.error;
     err.stencil = swapStencil;
@@ -203,7 +205,8 @@ Error = output_error_info(Error,soln,err,initialStencil,out_interval,i,1);
     for k = 1:num_iter
         err.error = 0*err.error;
         ETE_integrator.pos = err.M;
-        [err.error,resnorm,~] = ETE_integrator.step(soln,err,bndry_cond);
+%         [err.error,resnorm,~] = ETE_integrator.step(soln,err,bndry_cond);
+        [err.error,resnorm,ETE_integrator] = ETE_integrator.step(soln,err,bndry_cond);
         % Correct solution
         err.stencil(soln.i,err.ptr(err.M+1)) = err.stencil(soln.i,err.ptr(err.M+1)) - err.error;
 %=========================================================================%
