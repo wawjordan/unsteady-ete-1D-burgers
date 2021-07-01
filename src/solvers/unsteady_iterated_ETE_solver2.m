@@ -52,30 +52,34 @@ for i = 1:stenLength-1
     [err.error,~,ETE_integrator] = ETE_integrator.step(soln,err,bndry_cond);
     estError(:,i+1) = err.error;
 end
-
+tempError = err.error;
 % Correct solutions in stencil
 err.stencil(soln.i,:) = err.stencil(soln.i,:) - estError;
 
 
 plot((initialStencil(soln.i,:)-err.stencil(soln.i,:)),'r')
-Niter = 1;
+Niter = 20;
 for k = 1:Niter
     
 % Solve ETE again
+err.error = 0*err.error;
+ETE_integrator.em1 = 0*err.error;
+ETE_integrator.em2 = 0*err.error;
 for i = 1:stenLength-1
     ETE_integrator.u_old = initialStencil;
     ETE_integrator.pos = i;
-    [err.error,~,~] = ETE_integrator.step(soln,err,bndry_cond);
+    [err.error,~,ETE_integrator] = ETE_integrator.step(soln,err,bndry_cond);
     estError(:,i+1) = err.error;
 %     err.stencil(soln.i,i+1) = err.stencil(soln.i,i+1) - estError(:,i+1);
 end
 
 % Correct solutions in stencil
 err.stencil(soln.i,:) = err.stencil(soln.i,:) - estError;
-
-end
 plot((initialStencil(soln.i,:)-err.stencil(soln.i,:)),'b')
-plot(estError,'g')
+end
+% plot((initialStencil(soln.i,:)-err.stencil(soln.i,:)),'b')
+
+% plot(estError,'g')
 hold off;
 
 end
