@@ -5,7 +5,7 @@ bgrid = grid1D(linspace(-4,4,256),5);
 bsoln = burgers1D(bgrid,64,'TimeAccurate',true,'TimeRange',[-2,-1.8],...
     'dt',0.01,'ExactSolutionType','unsteady_shock');
 BC = exact_BC(bgrid);
-err_soln = burgers1D_error( bsoln,'ReconstructionOrder',4);
+err_soln = burgers1D_error( bsoln,'ReconstructionOrder',6);
 TM = trapezoid_method(bsoln);
 BD = back_diff_2(bsoln);
 
@@ -16,7 +16,7 @@ maxiter = 500;
 
 
 % [bsoln,err_soln,TM,TM_ETE,Primal,Error] = ETEsolver(bsoln,err_soln,TM,TM_ETE,BC,maxiter,1);
-[bsoln,err_soln,TM,TM_ETE,Primal,Error] = unsteady_iterated_ETE_solver(bsoln,err_soln,TM,TM_ETE,BC,maxiter,1);
+[bsoln,err_soln,TM,TM_ETE,Primal,Error] = unsteady_iterated_ETE_solver(bsoln,err_soln,TM,TM_ETE,BC,maxiter,1,10);
 % [bsoln,err_soln,BD,BD_ETE,Primal,Error] = unsteady_iterated_ETE_solver2(bsoln,err_soln,BD,BD_ETE,BC,maxiter,1);
 %%
 % hold on;
