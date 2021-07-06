@@ -4,7 +4,7 @@ classdef back_diff_2_ETE < time_integrator_type
         tau
         Rnorm, Rinit
         em1, em2
-        pos, u_old
+        pos
     end
     methods
         function this = back_diff_2_ETE(soln_error)
@@ -16,7 +16,7 @@ classdef back_diff_2_ETE < time_integrator_type
 
             this.em1 = soln_error.error;
             this.em2 = soln_error.error;
-            this.u_old = soln_error.stencil;
+%             this.u_old = soln_error.stencil;
         end
         function [e_new,R,this] = step(this,soln,soln_error,~)
             e_new = soln_error.error;
