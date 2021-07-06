@@ -3,7 +3,7 @@ clc; clear; close all;
 
 OUT.maxiter = 10000;
 OUT.Re = 64;
-OUT.order = 4;
+OUT.order = 6;
 
 OUT.numIC = 10;
 
