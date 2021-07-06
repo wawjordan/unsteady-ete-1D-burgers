@@ -115,7 +115,7 @@ Error.R{i+1,1} = resnorm;
 %=========================================================================%
 end
 tempError = err.error;
-% plot(estError,'r')
+plot(estError,'r')
 
 % Correct solutions in stencil
 err.stencil(soln.i,:) = err.stencil(soln.i,:) - estError;
@@ -217,7 +217,7 @@ Error = output_error_info(Error,soln,err,initialStencil,out_interval,i,k+1);
 %=========================================================================%
     end
     
-%     plot(initialStencil(soln.i,err.ptr(err.M+1))-err.stencil(soln.i,err.ptr(err.M+1)),'b')
+    plot(initialStencil(soln.i,err.ptr(err.M+1))-err.stencil(soln.i,err.ptr(err.M+1)),'b')
     
 end
 % hold off;
