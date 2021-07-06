@@ -4,8 +4,8 @@ load('C:\Users\Will\Documents\MATLAB\VT_Research\unsteady_iterative_correction_r
 % E = OUT.Final_Enorm_E;
 
 % L-norm (3=infinity)
-norm = 1;
-iter = 10;
+norm = 3;
+iter = 1;
 
 % dirname = 'G:\My Drive\MATLAB\VT_Research\2021\SciTech2022\Preliminary_Results\Figures_and_Data\';
 % filename1 = 'unsteady_OOA_trap_L1.dat';
@@ -99,47 +99,47 @@ end
 
 
 
-% subplot(1,2,1)
-% hold on;
-% for k = 1:L
-% plot(dx,Ex(:,k));
-% end
-% set(gca,'xscale','log')
-% set(gca,'yscale','log')
-% 
-% subplot(1,2,2)
-% hold on;
-% for k = 1:L
-% plot(dx(2:end),px(2:end,k));
-% end
-% set(gca,'xscale','log')
-% ylim([0,6])
-% legend('location','southwest');
-
-
-for k = 1:L
-figure(k)
 subplot(1,2,1)
 hold on;
-for i = 1:M
-    plot(dx,P(:,i,k))
+for k = 1:L
+plot(dx,Ex(:,k));
 end
-plot(dx,diag(P(:,:,k)),'r');
 set(gca,'xscale','log')
 set(gca,'yscale','log')
-hold off;
-
 
 subplot(1,2,2)
 hold on;
-for j = 1:N
-plot(dt,P(j,:,k))
+for k = 1:L
+plot(dx(2:end),px(2:end,k));
 end
-plot(dt,diag(P(:,:,k)),'r');
 set(gca,'xscale','log')
-set(gca,'yscale','log')
-hold off;
-ylabel('DE')
-xlabel('dt')
-end
+ylim([0,6])
+legend('location','southwest');
+
+
+% for k = 1:L
+% figure(k)
+% subplot(1,2,1)
+% hold on;
+% for i = 1:M
+%     plot(dx,P(:,i,k))
+% end
+% plot(dx,diag(P(:,:,k)),'r');
+% set(gca,'xscale','log')
+% set(gca,'yscale','log')
+% hold off;
+% 
+% 
+% subplot(1,2,2)
+% hold on;
+% for j = 1:N
+% plot(dt,P(j,:,k))
+% end
+% plot(dt,diag(P(:,:,k)),'r');
+% set(gca,'xscale','log')
+% set(gca,'yscale','log')
+% hold off;
+% ylabel('DE')
+% xlabel('dt')
+% end
 
