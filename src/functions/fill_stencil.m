@@ -8,6 +8,7 @@ exactError = zeros(Nds,stenLength);
 for i = 2:stenLength
     soln.count = i;
     soln.t = soln.t + soln.dt; % (update time for correct application of exact BCs)
+    fprintf('t = %f\n',soln.t);
     [soln.U,resnorm,integrator] = integrator.step(soln,bndry_cond);
     err.stencil(:,i) = soln.U;
     err.t(i) = soln.t;
