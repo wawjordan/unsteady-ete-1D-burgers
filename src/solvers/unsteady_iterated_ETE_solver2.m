@@ -60,8 +60,10 @@ err.error = 0*err.error;
 % First value is initial condition
 err.stencil(:,1) = soln.U;
 
-integrator.um1 = soln.calc_exact(soln.grid.x,soln.t);
-integrator.um2 = soln.calc_exact(soln.grid.x,soln.t-soln.dt);
+if isa(integrator,'back_diff_2')
+    integrator.um1 = soln.calc_exact(soln.grid.x,soln.t);
+    integrator.um2 = soln.calc_exact(soln.grid.x,soln.t-soln.dt);
+end
 
 
 % set initial error solution time
