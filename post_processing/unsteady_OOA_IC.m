@@ -2,6 +2,7 @@
 clc; clear; close all;
 % load('C:\Users\Will\Documents\MATLAB\VT_Research\unsteady_iterative_correction_results\ETE-IC-BD-4_full-shock-offset.mat');
 load('C:\Users\Will\Documents\MATLAB\VT_Research\unsteady_iterative_correction_results\ETE-IC-BD-4_full.mat');
+% load('C:\Users\Will\Documents\MATLAB\VT_Research\unsteady_iterative_correction_results\ETE-IC-CN-4test.mat');
 % E = OUT.Final_Enorm_E;
 
 % L-norm (3=infinity)
