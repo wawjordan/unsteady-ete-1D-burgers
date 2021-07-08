@@ -18,7 +18,7 @@ end
 Error.tempError = err.error;
 % Correct solutions in stencil
 err.stencil(soln.i,:) = err.stencil(soln.i,:) - estError;
-for i = 1:stenLength-1
+for i = 2:stenLength
 Error = output_error_info(Error,soln,err,initialStencil,Error.interval,i,1);
 end
 
