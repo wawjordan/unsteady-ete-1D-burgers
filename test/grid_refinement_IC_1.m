@@ -3,9 +3,18 @@ clc; clear; close all;
 
 OUT.maxiter = 10000;
 OUT.Re = 64;
-OUT.order = 6;
+OUT.order = 4;
 
 OUT.numIC = 10;
+
+
+OUT.method = @back_diff_2;
+OUT.ETE_method = @back_diff_2_ETE;
+OUT.solution_type = 'unsteady_shock';
+OUT.tstart = -2;
+OUT.tstop = 2;
+dt0 = 0.4;
+OUT.Nd = 2.^(5:9)+1;
 
 % OUT.method = @trapezoid_method;
 % OUT.ETE_method = @trapezoid_method_ETE;
@@ -15,13 +24,13 @@ OUT.numIC = 10;
 % dt0 = 0.4;
 % OUT.Nd = 2.^(5:7)+1;
 
-OUT.method = @trapezoid_method;
-OUT.ETE_method = @trapezoid_method_ETE;
-OUT.solution_type = 'pulse_minus';
-OUT.tstart = 0.3;
-OUT.tstop = 0.5;
-dt0 = 0.02;
-OUT.Nd = 2.^(4:9)+1;
+% OUT.method = @back_diff_2;
+% OUT.ETE_method = @back_diff_2_ETE;
+% OUT.solution_type = 'pulse_minus';
+% OUT.tstart = 0.3;
+% OUT.tstop = 0.5;
+% dt0 = 0.02;
+% OUT.Nd = 2.^(4:9)+1;
 
 
 OUT.Nx = [OUT.Nd,4*(OUT.Nd(end-1:end)-1)+1];
@@ -45,9 +54,9 @@ for i = 1:10
     out_interval = max(out_interval,gcd(i,intervals(1)));
 end
 intervals = intervals/out_interval;
-
+offset = 0.12345;
 for i = 1:M % space loop
-    bgrid = grid1D(linspace(-4,4,OUT.Nx(i)),ceil(OUT.order/2)+1);
+    bgrid = grid1D(linspace(-4+offset,4+offset,OUT.Nx(i)),ceil(OUT.order/2)+1);
     BC = exact_BC(bgrid);
     for j = 1:M % time loop
         soln = burgers1D(bgrid,OUT.Re,'TimeAccurate',true,...
@@ -57,9 +66,13 @@ for i = 1:M % space loop
         int = OUT.method(soln);
         ETE_int = OUT.ETE_method(err_soln);
         [soln,err_soln,int,ETE_int,Primal,Error] = ...
-            unsteady_iterated_ETE_solver(...
+            unsteady_iterated_ETE_solver2(...
             soln,err_soln,int,ETE_int,...
             BC,OUT.maxiter,intervals(j),OUT.numIC);
+%         [soln,err_soln,int,ETE_int,Primal,Error] = ...
+%             unsteady_iterated_ETE_solver(...
+%             soln,err_soln,int,ETE_int,...
+%             BC,OUT.maxiter,intervals(j),OUT.numIC);
 %         [soln,err_soln,int,ETE_int,Primal,Error] = ...
 %             ETEsolver2(soln,err_soln,int,ETE_int,BC,OUT.maxiter,intervals(j));
         OUT.Local_Error_P(i,j).E = Primal.out.error;
@@ -83,4 +96,4 @@ for i = 1:M % space loop
     OUT.dx(i,1) = max(soln.grid.dx);
 end
 
-save('C:\Users\Will\Documents\MATLAB\VT_Research\unsteady_iterative_correction_results\ETE-IC-CN-4pulsetest','OUT');
+save('C:\Users\Will\Documents\MATLAB\VT_Research\unsteady_iterative_correction_results\ETE-IC-BD-4_full-shock-offset','OUT');
