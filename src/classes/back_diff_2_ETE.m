@@ -18,7 +18,7 @@ classdef back_diff_2_ETE < time_integrator_type
             this.em2 = soln_error.error;
 %             this.u_old = soln_error.stencil;
         end
-        function [e_new,R,this] = step(this,soln,soln_error,~)
+        function [e_new,R,this] = step(this,soln,soln_error,bndry_cond)
             e_new = soln_error.error;
             ind = soln_error.ptr(this.pos+1);
 %             ind1 = soln_error.ptr(this.pos);
@@ -44,6 +44,7 @@ classdef back_diff_2_ETE < time_integrator_type
             
             ue = u;
             ue(this.i) = u(this.i)-e_new;
+%             ue = bndry_cond.enforce(soln,ue);
             
             Rue = soln.residual(ue);
             Ru = soln.residual(u);
@@ -98,7 +99,7 @@ classdef back_diff_2_ETE < time_integrator_type
 %             end
             while (any(this.Rnorm>this.newton_tol))&&(j<this.newton_max_iter)
                 ue(this.i) = u(this.i)-e_new;
-                
+%                 ue = bndry_cond.enforce(soln,ue);
                 J = soln.jacobian(ue);
                 J2 = -(2/3)*dt.*J;
                 J2(:,2) = J2(:,2) + 1;
@@ -110,6 +111,8 @@ classdef back_diff_2_ETE < time_integrator_type
 %                     (2/3)*dt.*(-Rue+Ru-TE));
                 de = tridiag(J2(:,1),J2(:,2),J2(:,3),RHS);
                 e_new = e_new + de;
+%                 e_new(1) = 0;
+%                 e_new(end) = 0;
                 R_new = RHS - (J2(:,1).*de + J2(:,2).*de + J2(:,3).*de);
                 for k = 1:soln.neq
                     this.Rnorm(1,k) = norm(R_new(:,k),2)/(soln.grid.imax^(1/2))/this.Rinit(1,k);
