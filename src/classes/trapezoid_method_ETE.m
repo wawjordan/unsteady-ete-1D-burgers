@@ -3,7 +3,7 @@ classdef trapezoid_method_ETE < time_integrator_type
         imax, i_low, i_high, i
         tau
         Rnorm, Rinit
-        pos, u_old
+        pos
     end
     methods
         function this = trapezoid_method_ETE(soln_error)
@@ -12,10 +12,7 @@ classdef trapezoid_method_ETE < time_integrator_type
             this.imax = soln_error.imax;
             this.i = soln_error.i;
             this.pos = soln_error.M;
-            this.u_old = soln_error.stencil;
-        end
-        function this = set.u_old(this,value)
-            this.u_old = value;
+%             this.u_old = soln_error.stencil;
         end
         function [e_new,R,this] = step(this,soln,soln_error,~)
 %============ use this one for asymmetric stencil     ========%
