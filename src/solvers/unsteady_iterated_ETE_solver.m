@@ -96,6 +96,8 @@ for i = 2:stenLength
 end
 initialStencil = err.stencil;
 
+hold on;
+plot(exactError,'k')
 
 % plot(exactError(:,stenLength),'k')
 % for i = 1:stenLength-1
@@ -138,6 +140,7 @@ for k = 1:num_iter
 %         [err.error,resnorm,~] = ETE_integrator.step(soln,err,bndry_cond);
         [err.error,resnorm,ETE_integrator] = ETE_integrator.step(soln,err,bndry_cond);
         estError(:,i+1) = err.error;
+        plot(initialStencil(soln.i,err.ptr(i))-err.stencil(soln.i,err.ptr(i)))
 %=========================================================================%
 % Iterative residuals for iterative corrections
 %=========================================================================%
@@ -156,7 +159,7 @@ Error = output_error_info(Error,soln,err,initialStencil,out_interval,i+1,k+1);
     end
 end
 
-% plot(initialStencil(soln.i,:)-err.stencil(soln.i,:),'b')
+plot(initialStencil(soln.i,:)-err.stencil(soln.i,:),'b')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -170,6 +173,7 @@ while (soln.count < max_steps)&&(err.t(err.ptr(M+1)) < err.tf)
     % solve primal
     [soln.U,resnorm,integrator] = integrator.step(soln,bndry_cond);
     soln.error = soln.U(soln.i) - soln.ExactSolution(soln.i);
+    plot(soln.error,'k')
 %=========================================================================%
 % Data output for primal solve
 %=========================================================================%
@@ -191,7 +195,7 @@ while (soln.count < max_steps)&&(err.t(err.ptr(M+1)) < err.tf)
     % solve ETE for new time step
 %     [err.error,resnorm,~] = ETE_integrator.step(soln,err,bndry_cond);
     [err.error,resnorm,ETE_integrator] = ETE_integrator.step(soln,err,bndry_cond);
-%     plot(err.error,'r')
+    plot(err.error,'r')
     tempError = err.error;
     err.stencil = swapStencil;
     err.stencil(soln.i,err.ptr(err.M+1)) = err.stencil(soln.i,err.ptr(err.M+1)) - err.error;
@@ -214,10 +218,12 @@ Error = output_error_info(Error,soln,err,initialStencil,out_interval,i,1);
 %=========================================================================%
 Error.R{i,k+1} = resnorm;
 Error = output_error_info(Error,soln,err,initialStencil,out_interval,i,k+1);
+
+plot(initialStencil(soln.i,err.ptr(err.M+1))-err.stencil(soln.i,err.ptr(err.M+1)))
 %=========================================================================%
     end
+    plot(initialStencil(soln.i,:)-err.stencil(soln.i,:),'b')
     
-    plot(initialStencil(soln.i,err.ptr(err.M+1))-err.stencil(soln.i,err.ptr(err.M+1)),'b')
     
 end
 % hold off;
