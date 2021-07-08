@@ -26,7 +26,7 @@ for k = 1:Error.num_iter
         Error = output_error_info(Error,soln,err,initialStencil,Error.interval,i,k+1);
     end
     
-    plot((initialStencil(soln.i,:)-err.stencil(soln.i,:)))
+%     plot((initialStencil(soln.i,:)-err.stencil(soln.i,:)))
 end
 
 end
