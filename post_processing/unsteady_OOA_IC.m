@@ -6,15 +6,15 @@ load('C:\Users\Will\Documents\MATLAB\VT_Research\unsteady_iterative_correction_r
 % E = OUT.Final_Enorm_E;
 
 % L-norm (3=infinity)
-norm = 1;
+norm = 3;
 iters = 0:10;
-times = 11;
+times = 5;
 % dirname = 'G:\My Drive\MATLAB\VT_Research\2021\SciTech2022\Preliminary_Results\Figures_and_Data\';
 % filename1 = 'unsteady_OOA_trap_L1.dat';
 
 dirname = 'C:\Users\Will\Desktop\';
 % filename1 = 'BDF2-4-iter_shock_offset_OOA.dat';
-filename1 = 'BDF2-4-iter_shock_OOA_time.dat';
+filename1 = 'BDF2-4-iter_shock_OOA_time_test4.dat';
 
 
 E_error = OUT.Error_Norms_E;
@@ -141,8 +141,37 @@ end
 %     pxp(2:end,k) = log(eep)/log(2);
 % end
 
-
-
+t = E_error(1,1).t(:);
+t(1) = -2;
+t(abs(t)<1e-6)=0;
+pxp(:,1) = 0;
+px(:,1,:) = 0;
+iter = 11;
+S.title='shock coalescence';
+S.variables={'Nodes',...
+    'Base DE: time + space',...
+    'Corrected DE: time + space',...
+    'Corrected DE: time + space (step: #1)',...
+    'Corrected DE: time + space (step: #10)',...
+    'Base DE',...
+    'Corrected DE',...
+    'Corrected DE (step: #1)',...
+    'Corrected DE (step: #10)'};
+S.zoneFmt='%0.2f';
+S.zoneVar=round(100*t)/100;
+S.Nzones=N;
+S.dataFmt='%g';
+for k = 1:N
+S.DATA(k).dat = [OUT.Nx',Expf,Exf(:,1),Exf(:,2),Exf(:,iter),Exp(:,k),Ex(:,k,1),Ex(:,k,2),Ex(:,k,iter)];
+end
+% for k = 1:N
+% S.DATA(k).dat = [OUT.Nx',pxpf,pxf(:,1),pxf(:,2),pxf(:,iter),pxp(:,k),px(:,k,1),px(:,k,2),px(:,k,iter)];
+% end
+% for k = 1:N
+% S.DATA(k).dat = [OUT.Nx',(OUT.tstop-OUT.tstart)./dt',...
+%     Expf,Exf(:,1),Exf(:,iter),Exp(:,k),Ex(:,k,iter),pxpf,pxf(:,1),pxf(:,iter),pxp(:,k),px(:,k,iter)];
+% end
+format_for_tecplot(dirname,filename1,S)
 % name = [dirname,filename1];
 % t = E_error(1,1).t(:);
 % t(abs(t)<1e-6)=0;
