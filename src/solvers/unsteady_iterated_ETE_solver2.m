@@ -22,6 +22,7 @@ Primal.out.t = nan(max_steps,1);
 Primal.out.error = cell(max_steps,1);
 Primal.out.u = cell(max_steps,1);
 Primal.t(1) = soln.t0;
+Primal.out.t(1) = soln.t0;
 Primal.E(1,:) = 0;
 
 
@@ -38,12 +39,14 @@ Error.out.t = nan(max_steps,1);
 % Error.out.error = cell(max_steps,1);
 Error.out.Eerror = cell(max_steps,num_iter+1);
 Error.out.error = cell(max_steps,num_iter+1);
+Error.t(1) = soln.t0;
+Error.out.t(1) = soln.t0;
 for i = 1:num_iter+1
     Error.R{1,i} = 0;
     Error.E(1,i,:) = 0;
     
-    Error.out.Eerror{1,i} = 0;
-    Error.out.error{1,i} = 0;
+    Error.out.Eerror{1,i} = zeros(soln.grid.imax,1);
+    Error.out.error{1,i} = zeros(soln.grid.imax,1);
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -59,6 +62,12 @@ err.error = 0*err.error;
 
 % First value is initial condition
 err.stencil(:,1) = soln.U;
+
+% output initial conditions
+Primal.out.t(i) = soln.t;
+Primal.out.error{1} = soln.U(soln.i)-soln.ExactSolution(soln.i);
+Primal.out.u{1} = soln.U(soln.i);
+Error.out.t(1) = soln.t;
 
 if isa(integrator,'back_diff_2')
     integrator.um1 = soln.calc_exact(soln.grid.x,soln.t);
