@@ -19,7 +19,7 @@ maxiter = 500;
 % [bsoln,err_soln,TM,TM_ETE,Primal,Error] = ETEsolver(bsoln,err_soln,TM,TM_ETE,BC,maxiter,1);
 % [bsoln,err_soln,TM,TM_ETE,Primal,Error] = unsteady_iterated_ETE_solver2(bsoln,err_soln,TM,TM_ETE,BC,maxiter,1,10);
 % [bsoln,err_soln,BD,BD_ETE,Primal,Error] = unsteady_iterated_ETE_solver(bsoln,err_soln,BD,BD_ETE,BC,maxiter,1,1);
-[bsoln,err_soln,BD,BD_ETE,Primal,Error] = unsteady_iterated_ETE_solver2(bsoln,err_soln,BD,BD_ETE,BC,maxiter,1,10);
+[bsoln,err_soln,BD,BD_ETE,Primal,Error] = unsteady_iterated_ETE_solver3(bsoln,err_soln,BD,BD_ETE,BC,maxiter,1,10);
 %%
 % hold on;
 % for i = 1:length(Error.out.t)
