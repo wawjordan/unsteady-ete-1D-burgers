@@ -97,29 +97,54 @@ filename = sprintf('%s_%s_N=%d_dt=%0.5f',func2str(OUT.method),OUT.solution_type,
 
 name=[dirname,filename1,'.dat'];
 fid=fopen(name,'wt');
-fprintf(fid,'TITLE = "viscous_shock"\n');
-fprintf(fid,'Zone\n');
-fprintf(fid,'T = "1"\n');
-fprintf(fid,'variables="x""t""u"\n');
-fprintf(fid,'I=%d J=%d\n',Nx,Nt);
-fprintf(fid,'ZONETYPE=ORDERED\n');
-fprintf(fid,'DATAPACKING=BLOCK\n');
-fprintf(fid,'DT=(DOUBLE DOUBLE DOUBLE)\n');
-field_out = [T(:), X(:), u_out(:)];
-[mm,nn]=size(field_out);
-for i = 1:mm
-for j = 1:nn
-    
-        fprintf(fid, '%0.12g\n',field_out(i,j));
+fprintf(fid,'TITLE = viscous_shock\n');
+fprintf(fid,'VARIABLES="t","x","Corrected DE"\n');
+O = size(OUT.Local_Error_E.e,2);
+for k = 1:O
+    fprintf(fid,'ZONE\n');
+    if k==1
+        fprintf(fid,'T = "initial correction"\n');
+    else
+        fprintf(fid,sprintf('T = "step: #%d"\n',k-1));
     end
+    fprintf(fid,'I=%d  J=%d\n',Nx,Nt);
+    fprintf(fid,'ZONETYPE = Ordered\n');
+    fprintf(fid,'DT=(DOUBLE DOUBLE DOUBLE)\n');
+    fprintf(fid,'DATAPACKING=BLOCK\n');
+    ec_out = [OUT.Local_Error_E.Ee{:,k}];
+    field_out = [T(:), X(:), ec_out(:)];
+    [mm,nn]=size(field_out);
+    for j = 1:nn
+        for i = 1:mm
+            fprintf(fid, '%0.12g\n',field_out(i,j));
+        end
+    end
+    fprintf(fid,'\n');
 end
+fclose(fid);
+
+
+% fprintf(fid,'ZONE\n');
+% fprintf(fid,'T = "primal solution"\n');
+% fprintf(fid,'I=%d  J=%d\n',Nx,Nt);
+% fprintf(fid,'ZONETYPE=ORDERED\n');
+% fprintf(fid,'DT=( DOUBLE, DOUBLE, DOUBLE )\n');
+% fprintf(fid,'DATAPACKING=BLOCK\n');
+% field_out = [T(:), X(:), u_out(:)];
+% [mm,nn]=size(field_out);
+% for j = 1:nn
+%     for i = 1:mm
+%         fprintf(fid, '%0.12g\n',field_out(i,j));
+%     end
+% end
 % fprintf(fid,'\n');
-% fprintf(fid,'Zone T = "base error"\n');
+% fprintf(fid,'ZONE\n');
+% fprintf(fid,'T = "base error"\n');
 % fprintf(fid,'variables="t","x","Base DE"\n');
 % fprintf(fid,'I=%d  J=%d\n',Nx,Nt);
 % fprintf(fid,'ZONETYPE = Ordered\n');
-% fprintf(fid,'DATAPACKING=BLOCK\n');
 % fprintf(fid,'DT=(DOUBLE DOUBLE DOUBLE)\n');
+% fprintf(fid,'DATAPACKING=BLOCK\n');
 % field_out = [T(:), X(:), eb_out(:)];
 % [mm,nn]=size(field_out);
 % for j = 1:nn
@@ -158,29 +183,7 @@ end
 % end
 % fprintf(fid,'\n');
 % 
-% O = size(OUT.Local_Error_E.e,2);
-% for k = 1:O
-%     if k==1
-%         fprintf(fid,'Zone T = "initial correction"\n');
-%     else
-%         fprintf(fid,sprintf('Zone T = "step: #%d"\n',k-1));
-%     end
-%     fprintf(fid,'variables="t","x","Corrected DE"\n');
-%     fprintf(fid,'I=%d  J=%d\n',Nx,Nt);
-%     fprintf(fid,'ZONETYPE = Ordered\n');
-%     fprintf(fid,'DATAPACKING=BLOCK\n');
-%     fprintf(fid,'DT=(DOUBLE DOUBLE DOUBLE)\n');
-%     ec_out = [OUT.Local_Error_E.Ee{:,k}];
-%     field_out = [T(:), X(:), ec_out(:)];
-%     [mm,nn]=size(field_out);
-%     for j = 1:nn
-%         for i = 1:mm
-%             fprintf(fid, '%0.12g\n',field_out(i,j));
-%         end
-%     end
-%     fprintf(fid,'\n');
-% end
-fclose(fid);
+
 
 
 %%
