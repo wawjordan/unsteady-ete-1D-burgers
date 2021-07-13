@@ -54,7 +54,7 @@ for i = 1:10
     out_interval = max(out_interval,gcd(i,intervals(1)));
 end
 intervals = intervals/out_interval;
-offset = 0.12345;
+offset = 0;
 for i = 1:M % space loop
     bgrid = grid1D(linspace(-4+offset,4+offset,OUT.Nx(i)),ceil(OUT.order/2)+1);
     BC = exact_BC(bgrid);
@@ -66,7 +66,7 @@ for i = 1:M % space loop
         int = OUT.method(soln);
         ETE_int = OUT.ETE_method(err_soln);
         [soln,err_soln,int,ETE_int,Primal,Error] = ...
-            unsteady_iterated_ETE_solver2(...
+            unsteady_iterated_ETE_solver3(...
             soln,err_soln,int,ETE_int,...
             BC,OUT.maxiter,intervals(j),OUT.numIC);
 %         [soln,err_soln,int,ETE_int,Primal,Error] = ...
@@ -96,4 +96,4 @@ for i = 1:M % space loop
     OUT.dx(i,1) = max(soln.grid.dx);
 end
 
-save('C:\Users\Will\Documents\MATLAB\VT_Research\unsteady_iterative_correction_results\ETE-IC-BD-4_full-shock-offset','OUT');
+save('C:\Users\Will\Documents\MATLAB\VT_Research\unsteady_iterative_correction_results\ETE-IC-BD-4_full-shock_algorithm2','OUT');
