@@ -1,20 +1,20 @@
 %% Separate Order analysis (now with iterative correction!)
 clc; clear; close all;
 % load('C:\Users\Will\Documents\MATLAB\VT_Research\unsteady_iterative_correction_results\ETE-IC-BD-4_full-shock-offset.mat');
-load('C:\Users\Will\Documents\MATLAB\VT_Research\unsteady_iterative_correction_results\ETE-IC-BD-4_full.mat');
+load('C:\Users\Will\Documents\MATLAB\VT_Research\unsteady_iterative_correction_results\ETE-IC-BD-4_full-shock_algorithm2.mat');
 % load('C:\Users\Will\Documents\MATLAB\VT_Research\unsteady_iterative_correction_results\ETE-IC-CN-4test.mat');
 % E = OUT.Final_Enorm_E;
 
 % L-norm (3=infinity)
-norm = 3;
+norm = 1;
 iters = 0:10;
-times = 5;
+times = 2;
 % dirname = 'G:\My Drive\MATLAB\VT_Research\2021\SciTech2022\Preliminary_Results\Figures_and_Data\';
 % filename1 = 'unsteady_OOA_trap_L1.dat';
 
 dirname = 'C:\Users\Will\Desktop\';
 % filename1 = 'BDF2-4-iter_shock_offset_OOA.dat';
-filename1 = 'BDF2-4-iter_shock_OOA_time_test4.dat';
+filename1 = 'observed_OOA2_time_test1.dat';
 
 
 E_error = OUT.Error_Norms_E;
@@ -161,12 +161,12 @@ S.zoneFmt='%0.2f';
 S.zoneVar=round(100*t)/100;
 S.Nzones=N;
 S.dataFmt='%g';
-for k = 1:N
-S.DATA(k).dat = [OUT.Nx',Expf,Exf(:,1),Exf(:,2),Exf(:,iter),Exp(:,k),Ex(:,k,1),Ex(:,k,2),Ex(:,k,iter)];
-end
 % for k = 1:N
-% S.DATA(k).dat = [OUT.Nx',pxpf,pxf(:,1),pxf(:,2),pxf(:,iter),pxp(:,k),px(:,k,1),px(:,k,2),px(:,k,iter)];
+% S.DATA(k).dat = [OUT.Nx',Expf,Exf(:,1),Exf(:,2),Exf(:,iter),Exp(:,k),Ex(:,k,1),Ex(:,k,2),Ex(:,k,iter)];
 % end
+for k = 1:N
+S.DATA(k).dat = [OUT.Nx',pxpf,pxf(:,1),pxf(:,2),pxf(:,iter),pxp(:,k),px(:,k,1),px(:,k,2),px(:,k,iter)];
+end
 % for k = 1:N
 % S.DATA(k).dat = [OUT.Nx',(OUT.tstop-OUT.tstart)./dt',...
 %     Expf,Exf(:,1),Exf(:,iter),Exp(:,k),Ex(:,k,iter),pxpf,pxf(:,1),pxf(:,iter),pxp(:,k),px(:,k,iter)];
