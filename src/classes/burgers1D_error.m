@@ -73,6 +73,22 @@ classdef burgers1D_error
                u1(j1) = polyval(P1,t);
            end
        end
+       function [u0,u1,this] = time_TE_est_mod(this,t,weight)
+           u0 = zeros(this.N,1);
+           u1 = zeros(this.N,1);
+           [A,mu] = vand_matrix(this.t(this.ptr),this.order);
+%            w = eye(this.M+1);
+%            w(this.ptr(this.M),this.ptr(this.M)) = sqrt(weight);
+           
+           for j1 = 1:this.N
+               P1 = A\(this.stencil(j1,this.ptr)');
+%                P2 = (w*A)\(w*this.stencil(j1,this.ptr)');
+               P2 = solve_augmented(A,this.stencil(j1,this.ptr)',weight,this.ptr(this.M+1));
+               pd = ddpoly(P2,t,2,mu);
+               u0(j1) = pd(:,1);
+               u1(j1) = pd(:,2);
+           end
+       end
        function [TE_est,R,u0] = space_TE_est(this,bsoln,u)
            u0 = zeros(this.N,1);
            u1 = zeros(this.N,1);
