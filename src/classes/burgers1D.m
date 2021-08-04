@@ -32,7 +32,7 @@ classdef burgers1D < soln1D
                        0.499*((this.grid.dx(this.i).^2)/this.nu)],[],2);
            defaultExactSolutionType = 'steady_shock';
            expectedSolutions = {'steady_shock','unsteady_shock',...
-               'pulse_plus','pulse_minus'};
+               'pulse_plus','pulse_minus','comp_pulse'};
            
            p = inputParser;
            validScalarPosNum = @(x) isnumeric(x) && isscalar(x) && (x > 0);
@@ -69,6 +69,8 @@ classdef burgers1D < soln1D
                    this.ExactSolutionType = @pulse_decay_plus;
                case 'pulse_minus'
                    this.ExactSolutionType = @pulse_decay_minus;
+               case 'comp_pulse'
+                   this.ExactSolutionType = @compression_pulse;
            end
        end
        function ExactSolution = get.ExactSolution(this)
@@ -128,6 +130,11 @@ classdef burgers1D < soln1D
            a1 = -this.Re*this.nu/this.grid.L;
            x2 = x*0.5*this.Re/this.grid.L;
            uex = a1*tanh(x2);
+       end
+       function uex = compression_pulse(this,x,t)
+           alpha = 2/(exp(0.5*this.Re)-1);
+           z = x/(2*sqrt(t));
+           uex = (2/sqrt(pi*t))*exp(-z.^2)./(alpha+erfc(z));
        end
    end
 end
