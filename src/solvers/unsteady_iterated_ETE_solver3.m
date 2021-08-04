@@ -82,8 +82,9 @@ err.t(1) = soln.t;
 [soln,err,integrator,exactError,initialStencil,Primal,Error] = ...
     fill_stencil(soln,err,integrator,bndry_cond,Primal,Error);
 STENCIL(1).S = err.stencil;
-% hold on;
-% plot(exactError,'k')
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+hold on;
+plot(exactError,'k')
 
 % solve ETE in stencil
 % ETE_integrator.u_old = initialStencil;
@@ -91,8 +92,10 @@ STENCIL(1).S = err.stencil;
     init_stencil_ETE(...
     soln,err,ETE_integrator,bndry_cond,initialStencil,Error);
 STENCIL(2).S = err.stencil;
-
-% plot((initialStencil(soln.i,:)-err.stencil(soln.i,:)),'r')
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+plot((initialStencil(soln.i,:)-err.stencil(soln.i,:)),'r')
+xlabel('x')
+ylabel('Discretization Error')
 
 [soln,err,ETE_integrator,Error,STENCIL] = init_iterate_ETE2(soln,err,ETE_integrator,bndry_cond,STENCIL,Error);
 
@@ -102,7 +105,7 @@ while (soln.count < max_steps)&&(err.t(err.ptr(M+1)) < err.tf)
     [soln,err,ETE_integrator,Error,STENCIL] = advance_ETE2(soln,err,ETE_integrator,bndry_cond,STENCIL,Error);
     [soln,err,ETE_integrator,Error,STENCIL] = advance_iterate_ETE2(soln,err,ETE_integrator,bndry_cond,STENCIL,Error);
 end
-% hold off;
+hold off;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
