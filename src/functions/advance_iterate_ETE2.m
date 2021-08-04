@@ -29,5 +29,6 @@ for k = 1:Error.num_iter
 %     plot(ETE_integrator.em2,'b');
 %     plot((STENCIL(1).S(soln.i,err.ptr(err.M+1))-STENCIL(k+2).S(soln.i,err.ptr(err.M+1))))
 end
+% plot((STENCIL(1).S(soln.i,err.ptr(err.M+1))-STENCIL(k+2).S(soln.i,err.ptr(err.M+1))),'g')
 
 end
