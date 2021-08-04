@@ -134,5 +134,76 @@ classdef back_diff_2_ETE < time_integrator_type
             this.em1 = e_new;
             R = R(~isnan(R(:,1)),:);
         end
+        function [e_new,R,this] = step_mod(this,soln,soln_error,weight)
+            e_new = soln_error.error;
+            ind = soln_error.ptr(this.pos+1);
+            
+            dt = soln.dt;
+            t = soln_error.t(ind);
+            
+%             u = soln.U;
+            u = soln_error.stencil(:,ind);
+%             u = this.u_old(:,ind);
+            
+            ue = u;
+            ue(this.i) = u(this.i)-e_new;
+%             ue = bndry_cond.enforce(soln,ue);
+            
+            Rue = soln.residual(ue);
+            Ru = soln.residual(u);
+            
+            %% LHS
+            J = soln.jacobian(u);
+            J2 = -(2/3)*dt.*J;
+            J2(:,2) = J2(:,2) + 1;
+            
+            %% TE estimation
+            [u0,u13,soln_error] = soln_error.time_TE_est_mod(t,weight);
+
+            [TE,~,~] = soln_error.space_TE_est(soln,u0);
+
+            Tdudt = u13(soln.i);
+
+            TE = TE + Tdudt;
+
+            this.tau = TE;
+            %% RHS
+            RHS = -(e_new - (4/3)*this.em1 + (1/3)*this.em2 + ...
+                    (2/3)*dt.*(-Rue+Ru-TE));
+            
+            R = nan(this.newton_max_iter,soln.neq);
+            
+            de = tridiag(J2(:,1),J2(:,2),J2(:,3),RHS);
+            e_new = e_new + de;
+            R_new = RHS - (J2(:,1).*de + J2(:,2).*de + J2(:,3).*de);
+            j = 1;
+                this.Rnorm(1,:) = 1;
+                R(1,:) = this.Rnorm;
+                for k = 1:soln.neq
+                    this.Rinit(1,k) = norm(R_new(:,k),2)/(soln.grid.imax^(1/2));
+                end
+            while (any(this.Rnorm>this.newton_tol))&&(j<this.newton_max_iter)
+                ue(this.i) = u(this.i)-e_new;
+
+                J = soln.jacobian(ue);
+                J2 = -(2/3)*dt.*J;
+                J2(:,2) = J2(:,2) + 1;
+                
+                Rue = soln.residual(ue);
+                RHS = -(e_new - (4/3)*this.em1 + (1/3)*this.em2 - ...
+                    (2/3)*dt.*(Rue-Ru+TE));
+                de = tridiag(J2(:,1),J2(:,2),J2(:,3),RHS);
+                e_new = e_new + de;
+                R_new = RHS - (J2(:,1).*de + J2(:,2).*de + J2(:,3).*de);
+                for k = 1:soln.neq
+                    this.Rnorm(1,k) = norm(R_new(:,k),2)/(soln.grid.imax^(1/2))/this.Rinit(1,k);
+                end
+                R(j,:) = this.Rnorm;
+                j = j+1;
+            end
+            this.em2 = this.em1;
+            this.em1 = e_new;
+            R = R(~isnan(R(:,1)),:);
+        end
     end
 end
