@@ -14,7 +14,7 @@ OUT.solution_type = 'unsteady_shock';
 OUT.tstart = -2;
 OUT.tstop = 2;
 dt0 = 0.4;
-OUT.Nd = 2.^(5:9)+1;
+OUT.Nd = 2.^(5:6)+1;
 
 % OUT.method = @trapezoid_method;
 % OUT.ETE_method = @trapezoid_method_ETE;
@@ -58,15 +58,16 @@ offset = 0;
 for i = 1:M % space loop
     bgrid = grid1D(linspace(-4+offset,4+offset,OUT.Nx(i)),ceil(OUT.order/2)+1);
     BC = exact_BC(bgrid);
-    for j = 1:M % time loop
+    for j = i % time loop
         soln = burgers1D(bgrid,OUT.Re,'TimeAccurate',true,...
             'TimeRange',[OUT.tstart,OUT.tstop],'dt',OUT.dt(j),...
             'ExactSolutionType',OUT.solution_type);
         err_soln = burgers1D_error( soln,'ReconstructionOrder',OUT.order);
         int = OUT.method(soln);
         ETE_int = OUT.ETE_method(err_soln);
+        fprintf('!================= Starting %d / %d =================!\n',(i-1)*M + j,M*M);
         [soln,err_soln,int,ETE_int,Primal,Error] = ...
-            unsteady_iterated_ETE_solver3(...
+            unsteady_iterated_ETE_solver2(...
             soln,err_soln,int,ETE_int,...
             BC,OUT.maxiter,intervals(j),OUT.numIC);
 %         [soln,err_soln,int,ETE_int,Primal,Error] = ...
@@ -96,4 +97,4 @@ for i = 1:M % space loop
     OUT.dx(i,1) = max(soln.grid.dx);
 end
 
-save('C:\Users\Will\Documents\MATLAB\VT_Research\unsteady_iterative_correction_results\ETE-IC-BD-4_full-shock_algorithm2','OUT');
+% save('C:\Users\Will\Documents\MATLAB\VT_Research\unsteady_iterative_correction_results\ETE-IC-BD-6_full-shock_algorithm2','OUT');
