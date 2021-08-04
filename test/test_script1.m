@@ -1,9 +1,12 @@
 %% Test Script for shiny new classes
 clc; clear; close all;
-
-bgrid = grid1D(linspace(-4,4,255),5);
-bsoln = burgers1D(bgrid,64,'TimeAccurate',true,'TimeRange',[-2,-1.9],...
+% figure(1);
+bgrid = grid1D(linspace(-4,4,257),5);
+bsoln = burgers1D(bgrid,64,'TimeAccurate',true,'TimeRange',[-2,-1.8],...
     'dt',0.01,'ExactSolutionType','unsteady_shock');
+% bgrid = grid1D(linspace(-5,20,257),5);
+% bsoln = burgers1D(bgrid,64,'TimeAccurate',true,'TimeRange',[1,1.2],...
+%     'dt',0.001,'ExactSolutionType','comp_pulse');
 BC = exact_BC(bgrid);
 err_soln = burgers1D_error( bsoln,'ReconstructionOrder',4);
 TM = trapezoid_method(bsoln);
@@ -19,7 +22,8 @@ maxiter = 500;
 % [bsoln,err_soln,TM,TM_ETE,Primal,Error] = ETEsolver(bsoln,err_soln,TM,TM_ETE,BC,maxiter,1);
 % [bsoln,err_soln,TM,TM_ETE,Primal,Error] = unsteady_iterated_ETE_solver2(bsoln,err_soln,TM,TM_ETE,BC,maxiter,1,10);
 % [bsoln,err_soln,BD,BD_ETE,Primal,Error] = unsteady_iterated_ETE_solver(bsoln,err_soln,BD,BD_ETE,BC,maxiter,1,1);
-[bsoln,err_soln,BD,BD_ETE,Primal,Error] = unsteady_iterated_ETE_solver3(bsoln,err_soln,BD,BD_ETE,BC,maxiter,1,10);
+% [bsoln,err_soln,BD,BD_ETE,Primal,Error] = unsteady_iterated_ETE_solver3(bsoln,err_soln,BD,BD_ETE,BC,maxiter,1,10);
+[bsoln,err_soln,BD,BD_ETE,Primal,Error] = unsteady_iterated_ETE_solver2(bsoln,err_soln,BD,BD_ETE,BC,maxiter,1,10);
 %%
 % hold on;
 % for i = 1:length(Error.out.t)
