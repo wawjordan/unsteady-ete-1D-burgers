@@ -1,6 +1,7 @@
 %% Plotting for Combined Order Analysis (ETE)
 clc; clear; close all;
-load('combinedETE_trap_shock_asym.mat');
+% load('combinedETE_trap_shock_asym.mat');
+
 % E = OUT.Final_Enorm_E;
 
 % L-norm (3=infinity)
