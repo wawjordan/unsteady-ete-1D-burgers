@@ -21,13 +21,13 @@ OUT.order = 4;
 % dt0 = 0.02;
 % OUT.Nd = 2.^(7:11);
 
-% OUT.method = @back_diff_2;
-% OUT.ETE_method = @back_diff_2_ETE;
-% OUT.solution_type = 'pulse_minus';
-% OUT.tstart = 0.3;
-% OUT.tstop = 0.5;
-% dt0 = 0.05;
-% OUT.Nd = 2.^(5:9)+1;
+OUT.method = @back_diff_2;
+OUT.ETE_method = @back_diff_2_ETE;
+OUT.solution_type = 'pulse_plus';
+OUT.tstart = 0.1;
+OUT.tstop = 0.6;
+dt0 = 0.05;
+OUT.Nd = 2.^(6:10)+1;
 
 % OUT.method = @trapezoid_method;
 % OUT.ETE_method = @trapezoid_method_ETE;
@@ -37,13 +37,13 @@ OUT.order = 4;
 % dt0 = 0.02;
 % OUT.Nd = 2.^(4:9)+1;
 
-OUT.method = @back_diff_2;
-OUT.ETE_method = @back_diff_2_ETE;
-OUT.solution_type = 'unsteady_shock';
-OUT.tstart = -2;
-OUT.tstop = 2;
-dt0 = 0.4;
-OUT.Nd = 2.^(5:9)+1;
+% OUT.method = @back_diff_2;
+% OUT.ETE_method = @back_diff_2_ETE;
+% OUT.solution_type = 'unsteady_shock';
+% OUT.tstart = -2;
+% OUT.tstop = 2;
+% dt0 = 0.4;
+% OUT.Nd = 2.^(5:9)+1;
 
 % OUT.method = @trapezoid_method;
 % OUT.ETE_method = @trapezoid_method_ETE;
@@ -108,4 +108,5 @@ for i = 1:M % space loop
     OUT.dx(i,1) = max(soln.grid.dx);
 end
 
-save('C:\Users\Will Jordan\Documents\MATLAB\Grad_School\VT_Research\Unsteady_ETE_1D_Burgers_Eqn\post_processing\combinedETE_BDF2_shock_asym','OUT');
+% save('C:\Users\Will Jordan\Documents\MATLAB\Grad_School\VT_Research\Unsteady_ETE_1D_Burgers_Eqn\post_processing\combinedETE_BDF2_pulse_asym','OUT');
+save('C:\Users\Will\Documents\MATLAB\VT_Research\unsteady-ete-1D-burgers\post_processing\combinedETE_BDF2_pulse_asym','OUT');
