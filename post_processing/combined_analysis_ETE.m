@@ -1,6 +1,6 @@
 %% Plotting for Combined Order Analysis (ETE)
 clc; clear; close all;
-load('combinedETE_BDF2_shock.mat');
+load('combinedETE_BDF2_pulse_asym.mat');
 E = OUT.Final_Enorm_E;
 
 M = size(E,1);
@@ -51,8 +51,8 @@ for i = 1:M-2
         E1(j) = E(I(j,1),I(j,2));
     end
     Ntime = ceil((OUT.tstop-OUT.tstart)./dt1);
-%     a1(:,i) = fsolve(@(a)comb(a,E1,Ntime,dx1,dt1),a0(:,i),options1);
-    a1(:,i) = lsqnonlin(@(a)comb(a,E1,Ntime,dx1,dt1),a0(:,i),-2*abs(a0(:,1)'),2*abs(a0(:,1)'),options2);
+    a1(:,i) = fsolve(@(a)comb(a,E1,Ntime,dx1,dt1),a0(:,i),options1);
+%     a1(:,i) = lsqnonlin(@(a)comb(a,E1,Ntime,dx1,dt1),a0(:,i),-2*abs(a0(:,1)'),2*abs(a0(:,1)'),options2);
 end
 
 
