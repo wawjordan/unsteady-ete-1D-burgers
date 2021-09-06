@@ -4,12 +4,12 @@ clc; clear; close all;
 OUT.maxiter = 10000;
 OUT.Re = 64;
 
-OUT.method = @trapezoid_method;
-OUT.solution_type = 'unsteady_shock';
-OUT.tstart = -2;
-OUT.tstop = -1;
-dt0 = 0.1;
-OUT.Nd = 2.^(4:9)+1;
+% OUT.method = @trapezoid_method;
+% OUT.solution_type = 'unsteady_shock';
+% OUT.tstart = -2;
+% OUT.tstop = -1;
+% dt0 = 0.1;
+% OUT.Nd = 2.^(4:9)+1;
 
 % OUT.method = @back_diff_2;
 % OUT.solution_type = 'unsteady_shock';
@@ -17,6 +17,13 @@ OUT.Nd = 2.^(4:9)+1;
 % OUT.tstop = -1;
 % dt0 = 0.5;
 % OUT.Nd = 2.^(4:9)+1;
+
+OUT.method = @back_diff_2;
+OUT.solution_type = 'pulse_plus';
+OUT.tstart = 0.1;
+OUT.tstop = 0.6;
+dt0 = 0.025;
+OUT.Nd = 2.^(6:11)+1;
 
 OUT.Nx = [OUT.Nd,4*OUT.Nd(end-1:end)];
 M = length(OUT.Nx);
@@ -55,4 +62,5 @@ for i = 1:M % space loop
 end
 % eex = (OUT.Final_Enorm(1:M-2,:) - OUT.Final_Enorm(2:M-1,:))./(OUT.Final_Enorm(2:M-1,:) - OUT.Final_Enorm(3:M,:));
 % px = log(eex)./log(2);
-save('Figures\combined','OUT');
+% save('Figures\combined','OUT');
+save('C:\Users\Will\Documents\MATLAB\VT_Research\unsteady-ete-1D-burgers\post_processing\combinedETE_BDF2_pulse_asym','OUT');
