@@ -1,6 +1,7 @@
 %% Plotting for Combined Order Analysis
 clc; clear; close all;
-load('combined.mat');
+% load('combined.mat');
+load('combined_BDF2_pulse_asym.mat');
 
 
 M = size(OUT.Final_Enorm,1);
