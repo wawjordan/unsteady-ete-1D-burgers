@@ -1,6 +1,6 @@
 function p = solve_augmented(A,y,weight,ind)
 n = length(y);
-m = size(A,2);
+% m = size(A,2);
 
 w = eye(n);
 w(ind,ind) = weight;
