@@ -1,11 +1,11 @@
 %% Exact Solution Output
 clc; clear; close all;
 
-bgrid = grid1D(linspace(-4,4,4097),0);
+bgrid = grid1D(linspace(-2,2,1025),0);
 soln = burgers1D(bgrid,64,'TimeAccurate',true,...
-            'TimeRange',[-2,2],'dt',0.1,...
-            'ExactSolutionType','unsteady_shock');
-t = -2:0.4:2;
+            'TimeRange',[0.1,0.6],'dt',0.001,...
+            'ExactSolutionType','pulse_plus');
+t = 0.1:0.001:0.6;
 L = length(t);
 % hold on;
 % for i = 1:length(t)
@@ -15,7 +15,7 @@ L = length(t);
 % hold off;
 
 
-dirname = 'C:\Users\Will Jordan\Desktop\';
+dirname = 'C:\Users\Will\Desktop\';
 filename1 = 'unsteady_burgers_eqn.dat';
 
 name=[dirname,filename1];
