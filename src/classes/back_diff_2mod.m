@@ -42,25 +42,39 @@ classdef back_diff_2mod < time_integrator_type
 %             J2(end,1) = J2(end,1) - cN;
 %             J2(end,2) = J2(end,2) + 2*cN;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            soln.U = bndry_cond.enforce(soln,soln.U);
-            a1 = -(2/3)*soln.dt*(...
-                soln.nu/(soln.grid.dx(this.i_low)^2) + ...
-                soln.U(this.i_low-1)/...
-                (soln.grid.dx(this.i_low) + soln.grid.dx(this.i_low+1)));
-            cN = -(2/3)*soln.dt*(...
-                soln.nu/(soln.grid.dx(this.i_high)^2) + ...
-                soln.U(this.i_high+1)/...
-                (soln.grid.dx(this.i_high) + soln.grid.dx(this.i_high-1)));
-            RHS(1) = RHS(1) - a1*(soln.U(this.i_low-1)  - this.um1(this.i_low-1));
-            RHS(end) = RHS(end) - cN*(soln.U(this.i_high+1) - this.um1(this.i_high+1));
-            
+%             a1 = -(2/3)*soln.dt*(...
+%                 soln.nu/(soln.grid.dx(this.i_low)^2) + ...
+%                 soln.U(this.i_low-1)/...
+%                 (soln.grid.dx(this.i_low) + soln.grid.dx(this.i_low+1)));
+%             cN = -(2/3)*soln.dt*(...
+%                 soln.nu/(soln.grid.dx(this.i_high)^2) + ...
+%                 soln.U(this.i_high+1)/...
+%                 (soln.grid.dx(this.i_high) + soln.grid.dx(this.i_high-1)));
+%             RHS(1) = RHS(1) - a1*(soln.U(this.i_low-1)  - this.um1(this.i_low-1));
+%             RHS(end) = RHS(end) - cN*(soln.U(this.i_high+1) - this.um1(this.i_high+1));
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  New (as of 09/30/21)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            UEX0_0 = soln.calc_exact(soln.grid.x(this.i_low-1),soln.t);        % Exact solution @ ghost node @ current time step
+            UEX0_1 = soln.calc_exact(soln.grid.x(this.i_low-1),soln.t-soln.dt);% Exact solution @ ghost node @ previous time step
+            UEXN_0 = soln.calc_exact(soln.grid.x(this.i_high+1),soln.t);        % Exact solution @ ghost node @ current time step
+            UEXN_1 = soln.calc_exact(soln.grid.x(this.i_high+1),soln.t-soln.dt);% Exact solution @ ghost node @ previous time step
+            a1 = -(2/3)*soln.dt*( soln.nu/( soln.grid.dx(this.i_low)^2 ) + UEX0_0/(soln.grid.dx(this.i_low) + soln.grid.dx(this.i_low+1)));
+            cN = -(2/3)*soln.dt*( soln.nu/(soln.grid.dx(this.i_high)^2 ) + UEXN_0/(soln.grid.dx(this.i_high) + soln.grid.dx(this.i_high-1)));
+            RHS(1)   = RHS(1)   - a1*(UEX0_0-UEX0_1);
+            RHS(end) = RHS(end) - cN*(UEXN_0-UEXN_1);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  New (as of 09/30/21)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
             
             du = tridiag(J2(:,1),J2(:,2),J2(:,3),RHS);
+            
             u_new(this.i) = soln.U(this.i) + du;
             R_new = RHS - (J2(:,1).*du + J2(:,2).*du + J2(:,3).*du);
             %%
-            u_new = bndry_cond.enforce(soln,u_new);
+            u_new = bndry_cond.enforce(soln,u_new);                        % still necessary for current implementation
             j = 1;
             if this.start == true
                 this.start = false;
@@ -83,23 +97,33 @@ classdef back_diff_2mod < time_integrator_type
                 RHS = -u_new(this.i) + (4/3)*this.um1(this.i) - ...
                 (1/3)*this.um2(this.i) - (2/3)*soln.dt.*res;
             
-                u_new = bndry_cond.enforce(soln,u_new);
-                a1 = -(2/3)*soln.dt*(...
-                    soln.nu/(soln.grid.dx(this.i_low)^2) + ...
-                    u_new(this.i_low-1)/...
-                    (soln.grid.dx(this.i_low) + soln.grid.dx(this.i_low+1)));
-                cN = -(2/3)*soln.dt*(...
-                    soln.nu/(soln.grid.dx(this.i_high)^2) + ...
-                    u_new(this.i_high+1)/...
-                    (soln.grid.dx(this.i_high) + soln.grid.dx(this.i_high-1)));
-                RHS(1) = RHS(1) - a1*(soln.U(this.i_low-1)  - this.um1(this.i_low-1));
-                RHS(end) = RHS(end) - cN*(soln.U(this.i_high+1) - this.um1(this.i_high+1));
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  New (as of 09/30/21)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            a1 = -(2/3)*soln.dt*( soln.nu/( soln.grid.dx(this.i_low)^2 ) + UEX0_1/(soln.grid.dx(this.i_low) + soln.grid.dx(this.i_low+1)));
+            cN = -(2/3)*soln.dt*( soln.nu/(soln.grid.dx(this.i_high)^2 ) + UEXN_1/(soln.grid.dx(this.i_high) + soln.grid.dx(this.i_high-1)));
+            RHS(1)   = RHS(1)   - a1*(UEX0_0-UEX0_1);
+            RHS(end) = RHS(end) - cN*(UEXN_0-UEXN_1);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  New (as of 09/30/21)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            
+%                 u_new = bndry_cond.enforce(soln,u_new);
+%                 a1 = -(2/3)*soln.dt*(...
+%                     soln.nu/(soln.grid.dx(this.i_low)^2) + ...
+%                     u_new(this.i_low-1)/...
+%                     (soln.grid.dx(this.i_low) + soln.grid.dx(this.i_low+1)));
+%                 cN = -(2/3)*soln.dt*(...
+%                     soln.nu/(soln.grid.dx(this.i_high)^2) + ...
+%                     u_new(this.i_high+1)/...
+%                     (soln.grid.dx(this.i_high) + soln.grid.dx(this.i_high-1)));
+%                 RHS(1) = RHS(1) - a1*(soln.U(this.i_low-1)  - this.um1(this.i_low-1));
+%                 RHS(end) = RHS(end) - cN*(soln.U(this.i_high+1) - this.um1(this.i_high+1));
 
                 du = tridiag(J2(:,1),J2(:,2),J2(:,3),RHS);
                 u_new(this.i) = u_new(this.i) + du;
                 R_new = RHS - (J2(:,1).*du + J2(:,2).*du + J2(:,3).*du);
-                %%
-%                 u_new = bndry_cond.enforce(soln,u_new);
+                
                 j = j+1;
                 for k = 1:soln.neq
                     this.Rnorm(1,k) = norm(R_new(:,k),2)/(soln.grid.imax^(1/2))/this.Rinit(1,k);
