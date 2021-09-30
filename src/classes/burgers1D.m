@@ -117,13 +117,30 @@ classdef burgers1D < soln1D
            uex = -2*sinh(x2)./(cosh(x2)+exp(-t2));
        end
        function uex = pulse_decay_plus(this,x,t)
-           x2 = x*0.5*this.Re/this.grid.L;
-           t2 = t*0.25*this.Re*this.Uref/this.grid.L;
-           uex = x2./t2./(1 + sqrt(t2).*exp(x2.^2./(4*t2)));
+           a = 0.5*this.Re/this.grid.L;
+           x2 = x*a;
+           t2 = t*a^2*this.nu;
+%            x2 = x*0.5*this.Re/this.grid.L;
+%            t2 = t*0.25*this.Re*this.Uref/this.grid.L;
+%            uex = x2./t2./(1 + sqrt(t2).*exp(x2.^2./(4*t2)));
+        uex = (1/(this.nu*a))*x./t./(1 + sqrt(this.nu)*a*sqrt(t).*exp(x.^2./(4*this.nu*t)));
+       end
+       function duex = dpulse_decay_plus(this,x,t)
+           a = 0.5*this.Re/this.grid.L;
+           tmp1 = a*sqrt(this.nu*t);
+           tmp2 = exp(x.^2/(4*this.nu*t));
+           tmp3 = x.*(a^2*n*tmp2./(2*tmp1) - ...
+               x.^2.*tmp1.*tmp2./(4*this.nu*t^2));
+           tmp4 = a*this.nu*t.*(tmp1.*tmp2+1).^2;
+           tmp5 = a*this.nu*t.^2.*(tmp1.*tmp2+1);
+           duex = -tmp3./tmp4 - x./tmp5;
        end
        function uex = pulse_decay_minus(this,x,t)
-           x2 = x*0.5*this.Re/this.grid.L;
-           t2 = t*0.25*this.Re*this.Uref/this.grid.L;
+           a = 0.5*this.Re/this.grid.L;
+           x2 = x*a;
+           t2 = t*a^2*this.nu;
+%            x2 = x*0.5*this.Re/this.grid.L;
+%            t2 = t*0.25*this.Re*this.Uref/this.grid.L;
            uex = x2./t2./(1 - sqrt(t2).*exp(x2.^2./(4*t2)));
        end
        function uex = steady_shock(this,x,~)
