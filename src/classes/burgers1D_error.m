@@ -110,5 +110,23 @@ classdef burgers1D_error
            R = bsoln.residual(u0);
            TE_est = -bsoln.nu*u2(this.i) + u0(this.i).*u1(this.i);
        end
+       function [TE_est,R,u0] = space_TE_est_mod(this,bsoln,u)
+           u0 = zeros(this.N,1);
+           u1 = zeros(this.N,1);
+           u2 = zeros(this.N,1);
+           for j1 = this.i_low-1:this.i_high+1
+               opts.RECT = true;
+               [P,~] = linsolve(this.X(j1-this.M/2:j1+this.M/2,:),...
+                   u(j1-this.M/2:j1+this.M/2,:),opts);
+               P = flipud(P);
+               P1 = polyder(P);
+               P2 = polyder(P1);
+               u0(j1) = polyval(P,bsoln.grid.x(j1));
+               u1(j1) = polyval(P1,bsoln.grid.x(j1));
+               u2(j1) = polyval(P2,bsoln.grid.x(j1));
+           end
+           R = bsoln.residual(u0);
+           TE_est = -bsoln.nu*u2(this.i) + u0(this.i).*u1(this.i);
+       end
    end
 end
