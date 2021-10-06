@@ -23,6 +23,8 @@ OUT.tstart = 0.1;
 OUT.tstop = 0.6;
 dt0 = 0.025;
 OUT.Nd = 2.^(7:11)+1;
+% dt0 = 0.000390625;
+% OUT.Nd = 2.^(13)+1;
 
 % OUT.method = @trapezoid_method;
 % OUT.ETE_method = @trapezoid_method_ETE;
@@ -42,9 +44,11 @@ OUT.Nd = 2.^(7:11)+1;
 
 
 OUT.Nx = [OUT.Nd,4*(OUT.Nd(end-1:end)-1)+1];
+% OUT.Nx = OUT.Nd;
 M = length(OUT.Nx);
 OUT.dx = zeros(M,1);
 OUT.dt = dt0*(2).^(0:-1:-(M-1));
+% OUT.dt = dt0;
 
 OUT.Local_Error_P = struct();
 OUT.Error_Norms_P = struct();
@@ -60,10 +64,11 @@ for i = 1:40
     out_interval = max(out_interval,gcd(i,intervals(1)));
 end
 intervals = intervals/out_interval;
+% intervals = 64;
 offset = 0;
 for i = 1:M % space + time loop
-    bgrid = grid1D(linspace(-2,2,OUT.Nx(i)),ceil(OUT.order/2)+1);
-%     bgrid = grid1D(linspace(-4+offset,4+offset,OUT.Nx(i)),ceil(OUT.order/2)+1);
+%     bgrid = grid1D(linspace(-2,2,OUT.Nx(i)),ceil(OUT.order/2)+1);
+    bgrid = grid1D(linspace(-4+offset,4+offset,OUT.Nx(i)),ceil(OUT.order/2)+1);
     BC = exact_BC(bgrid);
     soln = burgers1D(bgrid,OUT.Re,'TimeAccurate',true,...
         'TimeRange',[OUT.tstart,OUT.tstop],'dt',OUT.dt(i),...
@@ -105,5 +110,5 @@ fname = [...
     'C:\Users\Will\Documents\MATLAB\VT_Research',...
     '\unsteady-ete-1D-burgers',...
     '\post_processing\',...
-    'ETE-IC-BD-4_pulseplus_test'];
+    'ETE-IC-BD-4_pulseplus_oldBC_4-4'];
 save(fname,'OUT');
