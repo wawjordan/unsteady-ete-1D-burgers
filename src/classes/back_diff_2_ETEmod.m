@@ -151,8 +151,8 @@ classdef back_diff_2_ETEmod < time_integrator_type
 
                 de = tridiag(J2(:,1),J2(:,2),J2(:,3),RHS);
                 e_new = e_new + de;
-%                 e_new(1) = 0;
-%                 e_new(end) = 0;
+                e_new(1) = 0;
+                e_new(end) = 0;
                 R_new = RHS - (J2(:,1).*de + J2(:,2).*de + J2(:,3).*de);
                 for k = 1:soln.neq
                     this.Rnorm(1,k) = norm(R_new(:,k),2)/(soln.grid.imax^(1/2))/this.Rinit(1,k);
