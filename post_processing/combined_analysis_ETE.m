@@ -1,6 +1,8 @@
 %% Plotting for Combined Order Analysis (ETE)
 clc; clear; close all;
-load('combinedETE_BDF2_pulse_asym.mat');
+% load('combinedETE_BDF2_shock_oldBC.mat');
+load('combinedETE_BDF2_shock_newBC.mat');
+% load('combinedETE_BDF2_pulse_asym.mat');
 E = OUT.Final_Enorm_E;
 
 M = size(E,1);
