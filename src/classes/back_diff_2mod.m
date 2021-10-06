@@ -74,7 +74,10 @@ classdef back_diff_2mod < time_integrator_type
             u_new(this.i) = soln.U(this.i) + du;
             R_new = RHS - (J2(:,1).*du + J2(:,2).*du + J2(:,3).*du);
             %%
+%             u_new = extrap_BC(soln,u_new);
             u_new = bndry_cond.enforce(soln,u_new);                        % still necessary for current implementation
+            U1 = u_new(this.i_low-1);
+            U2 = u_new(this.i_high+1);
             j = 1;
             if this.start == true
                 this.start = false;
@@ -100,15 +103,15 @@ classdef back_diff_2mod < time_integrator_type
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  New (as of 09/30/21)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            a1 = -(2/3)*soln.dt*( soln.nu/( soln.grid.dx(this.i_low)^2 ) + UEX0_1/(soln.grid.dx(this.i_low) + soln.grid.dx(this.i_low+1)));
-            cN = -(2/3)*soln.dt*( soln.nu/(soln.grid.dx(this.i_high)^2 ) + UEXN_1/(soln.grid.dx(this.i_high) + soln.grid.dx(this.i_high-1)));
-            RHS(1)   = RHS(1)   - a1*(UEX0_0-UEX0_1);
-            RHS(end) = RHS(end) - cN*(UEXN_0-UEXN_1);
+%             a1 = -(2/3)*soln.dt*( soln.nu/( soln.grid.dx(this.i_low)^2 ) + UEX0_1/(soln.grid.dx(this.i_low) + soln.grid.dx(this.i_low+1)));
+%             cN = -(2/3)*soln.dt*( soln.nu/(soln.grid.dx(this.i_high)^2 ) + UEXN_1/(soln.grid.dx(this.i_high) + soln.grid.dx(this.i_high-1)));
+%             RHS(1)   = RHS(1)   - a1*(UEX0_0-UEX0_1);
+%             RHS(end) = RHS(end) - cN*(UEXN_0-UEXN_1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  New (as of 09/30/21)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
-%                 u_new = bndry_cond.enforce(soln,u_new);
+%                 u_new = bndry_cond.enforce(soln,u_new);                    % still necessary for current implementation
 %                 a1 = -(2/3)*soln.dt*(...
 %                     soln.nu/(soln.grid.dx(this.i_low)^2) + ...
 %                     u_new(this.i_low-1)/...
