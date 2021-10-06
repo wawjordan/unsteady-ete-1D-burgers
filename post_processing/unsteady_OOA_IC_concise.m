@@ -1,5 +1,5 @@
 %% IC OOA analysis (simultaneous refinement in space + time)
-clc; clear; close all;
+clc; clear; %close all;
 % src_dirname = [...
 %     'C:\Users\Will\Documents\MATLAB\VT_Research',...
 %     '\unsteady_iterative_correction_results',...
@@ -8,12 +8,12 @@ src_dirname = [...
     'C:\Users\Will\Documents\MATLAB\VT_Research',...
     '\unsteady-ete-1D-burgers\',...
     '\post_processing\'];
-src_fname = 'ETE-IC-BD-4_pulseplus_test';
+src_fname = 'ETE-IC-BD-4_pulseplus_oldBC_4-4';
 % fname = 'ETE-IC-BD-4_alg1_no-weights';
 % fname = 'ETE-IC-BD-4_alg1_lin-weights';
 load([src_dirname,src_fname]);
 
-norms = 3;       % L-norm (3=infinity)
+norms = 1;       % L-norm (3=infinity)
 iters = 0:10;    % 0 corresponds to initial ETE solve
 times = 2;%:2:10;
 
@@ -22,7 +22,7 @@ src_dirname = [...
     '\unsteady_iterative_correction_results',...
     '\iterative_weighting_experiments',...
     '\tecplot_output\'];
-target_fname = [src_fname,'.dat'];
+% target_fname = [src_fname,'.dat'];
 
 % separate primal and ETE info for easier handling
 E_error = OUT.Error_Norms_E;
@@ -141,7 +141,7 @@ end
 
 %% Plotting
 
-figure(2);
+figure(1);
 subplot(1,2,1)
 hold on
 for i = 1:M2
