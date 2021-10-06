@@ -12,9 +12,9 @@ times = 2:11;
 % dirname = 'G:\My Drive\MATLAB\VT_Research\2021\SciTech2022\Preliminary_Results\Figures_and_Data\';
 % filename1 = 'unsteady_OOA_trap_L1.dat';
 
-dirname = 'C:\Users\Will\Desktop\';
+% dirname = 'C:\Users\Will\Documents\MATLAB\VT_Research\unsteady_iterative_correction_results\CCAS_SEPTEMBER\';
 % filename1 = 'BDF2-4-iter_shock_offset_OOA.dat';
-filename1 = 'observed_OOA6_time_test1.dat';
+% filename1 = 'Local_Error.dat';
 
 
 E_error = OUT.Error_Norms_E;
