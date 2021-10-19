@@ -3,8 +3,10 @@ for k = 1:Error.num_iter
     % solve ETE again
     % use error estimates using current iteration level
     err.error = STENCIL(1).S(soln.i,err.ptr(err.M+1)) - STENCIL(k+2).S(soln.i,err.ptr(err.M+1));
-    ETE_integrator.em1 = STENCIL(1).S(soln.i,err.ptr(err.M)) - STENCIL(k+2).S(soln.i,err.ptr(err.M));
-    ETE_integrator.em2 = STENCIL(1).S(soln.i,err.ptr(err.M-1)) - STENCIL(k+2).S(soln.i,err.ptr(err.M-1));
+    if (isa(ETE_integrator,'back_diff_2_ETE')||isa(ETE_integrator,'back_diff_2_ETEmod')||isa(ETE_integrator,'back_diff_2_ETEmod2'))
+        ETE_integrator.em1 = STENCIL(1).S(soln.i,err.ptr(err.M)) - STENCIL(k+2).S(soln.i,err.ptr(err.M));
+        ETE_integrator.em2 = STENCIL(1).S(soln.i,err.ptr(err.M-1)) - STENCIL(k+2).S(soln.i,err.ptr(err.M-1));
+    end
     ETE_integrator.pos = err.M;
     
     % reset stencil to uncorrected stencil (prevents correction from being
