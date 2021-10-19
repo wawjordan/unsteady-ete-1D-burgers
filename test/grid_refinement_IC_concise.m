@@ -8,21 +8,21 @@ OUT.order = 4;
 OUT.numIC = 10;
 
 
-% OUT.method = @back_diff_2;
-% OUT.ETE_method = @back_diff_2_ETE;
-% OUT.solution_type = 'unsteady_shock';
-% OUT.tstart = -2;
-% OUT.tstop = 2;
-% dt0 = 0.4;
-% OUT.Nd = 2.^(5:9)+1;
+OUT.method = @back_diff_2mod;
+OUT.ETE_method = @back_diff_2_ETEmod;
+OUT.solution_type = 'unsteady_shock';
+OUT.tstart = -2;
+OUT.tstop = 2;
+dt0 = 0.4;
+OUT.Nd = 2.^(5:11)+1;
 
-OUT.method = @back_diff_2;
-OUT.ETE_method = @back_diff_2_ETE;
-OUT.solution_type = 'pulse_plus';
-OUT.tstart = 0.1;
-OUT.tstop = 0.6;
-dt0 = 0.025;
-OUT.Nd = 2.^(7:11)+1;
+% OUT.method = @back_diff_2mod;
+% OUT.ETE_method = @back_diff_2_ETEmod;
+% OUT.solution_type = 'pulse_plus';
+% OUT.tstart = 0.1;
+% OUT.tstop = 0.6;
+% dt0 = 0.025;
+% OUT.Nd = 2.^(7:11)+1;
 % dt0 = 0.000390625;
 % OUT.Nd = 2.^(13)+1;
 
@@ -78,7 +78,7 @@ for i = 1:M % space + time loop
     ETE_int = OUT.ETE_method(err_soln);
     fprintf('!================= Starting %d / %d =================!\n',i,M);
     [soln,err_soln,int,ETE_int,Primal,Error] = ...
-        unsteady_iterated_ETE_solver2(...
+        unsteady_iterated_ETE_solver3(...
         soln,err_soln,int,ETE_int,...
         BC,OUT.maxiter,intervals(i),OUT.numIC);
     OUT.Local_Error_P(i).E = Primal.out.error;
@@ -110,5 +110,5 @@ fname = [...
     'C:\Users\Will\Documents\MATLAB\VT_Research',...
     '\unsteady-ete-1D-burgers',...
     '\post_processing\',...
-    'ETE-IC-BD-4_pulseplus_oldBC_4-4'];
+    'ETE-IC-BD-4_shock_alg2_new_reconstruct'];
 save(fname,'OUT');
