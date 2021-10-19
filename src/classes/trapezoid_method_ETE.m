@@ -53,7 +53,7 @@ classdef trapezoid_method_ETE < time_integrator_type
             
             F1 = Rue1 - Ru1 + TE1;
             F2 = Rue2 - Ru2 + TE2;
-            
+%             F1 = F2;
 %             [TE1,RE1,u01] = soln_error.space_TE_est(soln,u01);
 %             [TE2,RE2,u02] = soln_error.space_TE_est(soln,u02);
 %             Tdudt1 = u11(this.i);
@@ -68,7 +68,7 @@ classdef trapezoid_method_ETE < time_integrator_type
             
             this.tau = 0.5*(TE1+TE2);
             
-            J = soln.jacobian(u1);
+            J = soln.jacobian(u2);
             J2 = -(1/2)*soln.dt.*J;
             J2(:,2) = J2(:,2) + 1;
             
