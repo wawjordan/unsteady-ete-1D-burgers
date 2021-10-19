@@ -72,8 +72,10 @@ Primal.out.error{1} = soln.U(soln.i)-soln.ExactSolution(soln.i);
 Primal.out.u{1} = soln.U(soln.i);
 Error.out.t(1) = soln.t;
 
-integrator.um1 = soln.calc_exact(soln.grid.x,soln.t);
-integrator.um2 = soln.calc_exact(soln.grid.x,soln.t-soln.dt);
+if (isa(integrator,'back_diff_2')||isa(integrator,'back_diff_2mod'))
+    integrator.um1 = soln.calc_exact(soln.grid.x,soln.t);
+    integrator.um2 = soln.calc_exact(soln.grid.x,soln.t-soln.dt);
+end
 
 % set initial error solution time
 err.t(1) = soln.t;
