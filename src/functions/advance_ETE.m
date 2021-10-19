@@ -8,8 +8,10 @@ err.ptr = circshift(err.ptr,-1);
 
 ETE_integrator.pos = err.M;
 % ETE_integrator.em1 = Error.tempError;
-ETE_integrator.em1 = estError(:,err.ptr(err.M));
-ETE_integrator.em2 = estError(:,err.ptr(err.M-1));
+if (isa(ETE_integrator,'back_diff_2_ETE')||isa(ETE_integrator,'back_diff_2_ETEmod')||isa(ETE_integrator,'back_diff_2_ETEmod2'))
+    ETE_integrator.em1 = estError(:,err.ptr(err.M));
+    ETE_integrator.em2 = estError(:,err.ptr(err.M-1));
+end
 % err.error = Error.tempError;
 err.error = estError(:,err.ptr(err.M));
 [err.error,resnorm,ETE_integrator] = ETE_integrator.step(soln,err,bndry_cond);
