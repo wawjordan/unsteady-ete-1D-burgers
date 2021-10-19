@@ -9,8 +9,10 @@ for k = 1:Error.num_iter
 %     err.stencil = initStencil;
     % solve ETE again
     err.error = Error.tempError;
-    ETE_integrator.em1 = 0*estError(:,err.ptr(err.M));
-    ETE_integrator.em2 = 0*estError(:,err.ptr(err.M-1));
+    if (isa(ETE_integrator,'back_diff_2_ETE')||isa(ETE_integrator,'back_diff_2_ETEmod')||isa(ETE_integrator,'back_diff_2_ETEmod2'))
+        ETE_integrator.em1 = 0*estError(:,err.ptr(err.M));
+        ETE_integrator.em2 = 0*estError(:,err.ptr(err.M-1));
+    end
 %     err.error = estError(:,err.ptr(err.M));
     ETE_integrator.pos = err.M;
     
