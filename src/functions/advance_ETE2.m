@@ -9,8 +9,10 @@ err.ptr = circshift(err.ptr,-1);
 
 ETE_integrator.pos = err.M;
 err.error = STENCIL(1).S(soln.i,err.ptr(err.M+1)) - STENCIL(2).S(soln.i,err.ptr(err.M+1));
-ETE_integrator.em1 = STENCIL(1).S(soln.i,err.ptr(err.M)) - STENCIL(2).S(soln.i,err.ptr(err.M));
-ETE_integrator.em2 = STENCIL(1).S(soln.i,err.ptr(err.M-1)) - STENCIL(2).S(soln.i,err.ptr(err.M-1));
+if (isa(ETE_integrator,'back_diff_2_ETE')||isa(ETE_integrator,'back_diff_2_ETEmod')||isa(ETE_integrator,'back_diff_2_ETEmod2'))
+    ETE_integrator.em1 = STENCIL(1).S(soln.i,err.ptr(err.M)) - STENCIL(2).S(soln.i,err.ptr(err.M));
+    ETE_integrator.em2 = STENCIL(1).S(soln.i,err.ptr(err.M-1)) - STENCIL(2).S(soln.i,err.ptr(err.M-1));
+end
 
 [err.error,resnorm,ETE_integrator] = ETE_integrator.step(soln,err,bndry_cond);
 err.stencil = STENCIL(2).S;
