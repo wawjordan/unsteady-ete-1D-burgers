@@ -10,8 +10,10 @@ estError = zeros(Nds,stenLength);
 for k = 1:Error.num_iter
     % solve ETE again
     err.error = 0*err.error;
-    ETE_integrator.em1 = 0*err.error;
-    ETE_integrator.em2 = 0*err.error;
+    if (isa(ETE_integrator,'back_diff_2_ETE')||isa(ETE_integrator,'back_diff_2_ETEmod')||isa(ETE_integrator,'back_diff_2_ETEmod2'))
+        ETE_integrator.em1 = 0*err.error;
+        ETE_integrator.em2 = 0*err.error;
+    end
     for i = 2:stenLength
         err.count = i;
         ETE_integrator.pos = i-1;
