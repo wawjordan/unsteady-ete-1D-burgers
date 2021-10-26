@@ -39,7 +39,13 @@ for h = 1:L
             [~,index] = min( abs( OUT.Error_Norms_E(1).t(i)...
                 - OUT.Error_Norms_E(h).t ) );
             for k = 1:O
+                if j == N
+                    %% Conditional statement to include 50 iteration case
+                    j2 = size(OUT.Error_Norms_E(h).E,2);
+                    ETE_Ex(h,i,j,k) = OUT.Error_Norms_E(h).E(index,j2,k);
+                else     
                 ETE_Ex(h,i,j,k) = OUT.Error_Norms_E(h).E(index,j,k);
+                end
             end
         end
         [~,index2] = min( abs( OUT.Error_Norms_P(1).t(i)...
@@ -70,8 +76,15 @@ end
 for h = 1:L
     for j = 1:N
         for k = 1:O
+            if j == N
+                %% Conditional statement to include 50 iteration case
+                j2 = size(OUT.Error_Norms_E(h).E,2);
+                ETE_Ef(h,j,k) = OUT.Error_Norms_E(h).E(end,j2,k);
+                ETE_Eg(h,j,k) = OUT.Final_Enorm_E{h,1}(j2,k);
+                else     
             ETE_Ef(h,j,k) = OUT.Error_Norms_E(h).E(end,j,k);
             ETE_Eg(h,j,k) = OUT.Final_Enorm_E{h,1}(j,k);
+            end
         end
     end
     for k = 1:O
