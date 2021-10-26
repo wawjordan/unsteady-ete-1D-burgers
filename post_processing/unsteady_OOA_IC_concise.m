@@ -8,14 +8,14 @@ src_dirname = [...
     'C:\Users\Will\Documents\MATLAB\VT_Research',...
     '\unsteady-ete-1D-burgers\',...
     '\post_processing\'];
-% src_fname = 'ETE-IC-BD-4_shock_alg2_new_reconstruct';
-src_fname = 'ETE-IC-BD-4_pulseplus_exact_TE-4';
+src_fname = 'ETE-IC-BD-4_shock_alg2_new_reconstruct_extended50';
+% src_fname = 'ETE-IC-BD-4_pulseplus_exact_TE-4';
 % fname = 'ETE-IC-BD-4_alg1_lin-weights';
 load([src_dirname,src_fname]);
 
 norms = 1;       % L-norm (3=infinity)
-iters = 0:10;    % 0 corresponds to initial ETE solve
-times = 11;
+iters = 9:10;    % 0 corresponds to initial ETE solve
+times = 1;
 
 src_dirname = [...
     'C:\Users\Will\Documents\MATLAB\VT_Research',...
@@ -78,7 +78,13 @@ for h = 1:L
             [~,index] = min( abs( OUT.Error_Norms_E(1).t(i)...
                 - OUT.Error_Norms_E(h).t ) );
             for k = 1:O
-                ETE_Ex(h,i,j,k) = OUT.Error_Norms_E(h).E(index,j,k);
+                if j == N
+                    %% Conditional statement to include 50 iteration case
+                    j2 = size(OUT.Error_Norms_E(h).E,2);
+                    ETE_Ex(h,i,j,k) = OUT.Error_Norms_E(h).E(index,j2,k);
+                else     
+                    ETE_Ex(h,i,j,k) = OUT.Error_Norms_E(h).E(index,j,k);
+                end
             end
         end
         [~,index2] = min( abs( OUT.Error_Norms_P(1).t(i)...
@@ -187,7 +193,7 @@ end
 for j = 1:N2
     for k = 1:O2
         plot(dx(2:end),ETE_pf(2:end,iters(j)+1,norms(k)),'c');
-        plot(dx(2:end),ETE_pg(2:end,iters(j)+1,norms(k)),'b');
+        plot(dx(2:end),ETE_pg(2:end,iters(j)+1,norms(k)));
     end
 end
 hold off
