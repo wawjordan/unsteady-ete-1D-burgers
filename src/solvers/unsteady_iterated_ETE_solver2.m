@@ -69,7 +69,7 @@ Primal.out.error{1} = soln.U(soln.i)-soln.ExactSolution(soln.i);
 Primal.out.u{1} = soln.U(soln.i);
 Error.out.t(1) = soln.t;
 
-if (isa(integrator,'back_diff_2')||isa(integrator,'back_diff_2mod'))
+if (isa(integrator,'back_diff_2')||isa(integrator,'back_diff_2mod')||isa(integrator,'back_diff_2mod2'))
     integrator.um1 = soln.calc_exact(soln.grid.x,soln.t);
     integrator.um2 = soln.calc_exact(soln.grid.x,soln.t-soln.dt);
 end
